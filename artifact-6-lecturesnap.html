@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LectureSnap — Artifact 6 — Divyanshu</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/pf-chrome.css">
+<style>
+:root {
+  --paper:#f6f3ec; --paper-d:#ede9df; --ink:#1c2433; --ink-m:#3d4759; --ink-l:#6b7585;
+  --amber:#9a571c; --amber-p:#f5ead8; --amber-m:#c47a3a;
+  --teal:#1e5f5a; --teal-p:#e0f0ee;
+  --red:#8b2e1e; --red-p:#fdf0ee;
+  --blue:#2a4a8a; --blue-p:#eef2fc;
+  --rule:#d4cfc4; --shadow:rgba(28,36,51,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.ls-legacy-nav{border-bottom:1px solid var(--rule);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--paper);z-index:100}
+.nav-left{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-l);letter-spacing:.12em;text-transform:uppercase}
+.nav-right{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.08em}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-size:12px;color:var(--ink-m);text-decoration:none;letter-spacing:.02em;transition:color .15s}
+.nav-links a:hover{color:var(--amber)}
+
+/* PAGE */
+.page{max-width:880px;margin:0 auto;padding:0 32px 100px}
+
+/* HERO */
+.hero{padding:68px 0 52px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
+h1{font-family:'Archivo',system-ui,sans-serif;font-size:clamp(30px,4.5vw,48px);font-weight:700;line-height:1.15;color:var(--ink);max-width:740px;margin-bottom:22px}
+h1 em{font-style:italic;color:var(--amber)}
+.hero-sub{font-size:17px;color:var(--ink-m);max-width:640px;line-height:1.65;margin-bottom:36px}
+.meta-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+.pill{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 12px;border-radius:2px;border:1px solid var(--rule);color:var(--ink-m);background:#fff}
+.pill.a{border-color:var(--amber);color:var(--amber);background:var(--amber-p)}
+.pill.t{border-color:var(--teal);color:var(--teal);background:var(--teal-p)}
+.sup-links{display:flex;flex-wrap:wrap;gap:20px}
+.sup-links a{font-size:13px;font-weight:500;color:var(--amber);text-decoration:none;border-bottom:1px solid var(--amber-m);padding-bottom:1px;transition:color .15s,border-color .15s}
+.sup-links a:hover{color:var(--ink);border-color:var(--ink)}
+
+/* SECTIONS */
+.section{padding:60px 0 0}
+.s-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
+h2{font-family:'Archivo',system-ui,sans-serif;font-size:28px;font-weight:700;color:var(--ink);margin-bottom:24px;line-height:1.22}
+h3{font-family:'Archivo',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--ink);margin:36px 0 14px;line-height:1.3}
+p{color:var(--ink-m);margin-bottom:16px;max-width:700px}
+p strong{color:var(--ink);font-weight:600}
+p em{font-style:italic}
+hr.rule{border:none;border-top:1px solid var(--rule);margin:60px 0 0}
+
+/* CALLOUT BOX */
+.callout{background:var(--amber-p);border-left:3px solid var(--amber);border-radius:0 4px 4px 0;padding:18px 22px;margin:24px 0;max-width:700px}
+.callout p{margin:0;font-size:15px;color:var(--ink-m)}
+.callout p strong{color:var(--amber)}
+
+/* HONEST BOX */
+.honest{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:18px 22px;margin:24px 0;max-width:700px}
+.honest-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-l);margin-bottom:6px}
+.honest p{margin:0;font-size:14px;color:var(--ink-m)}
+
+/* FAILURE QUADRANT */
+.quadrant-wrap{margin:36px 0;background:#fff;border:1px solid var(--rule);border-radius:4px;padding:32px;max-width:720px}
+.diag-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-l);margin-bottom:20px}
+.quad-outer{display:flex;gap:10px;align-items:stretch}
+.y-axis{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-l);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;padding:4px 0}
+.quad-inner{flex:1}
+.x-labels{display:flex;justify-content:space-between;margin-bottom:6px}
+.x-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-l);letter-spacing:.08em;text-transform:uppercase}
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.q-cell{padding:18px 16px;border-radius:3px}
+.q-name{font-family:'Archivo',system-ui,sans-serif;font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.q-examples{font-size:11px;line-height:1.55;margin-bottom:10px}
+.q-badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;display:inline-block}
+/* cells */
+.q-danger{background:#fff3f0;border:1.5px solid #e8b4ac}
+.q-danger .q-name{color:var(--red)}
+.q-danger .q-examples{color:#7a3a30}
+.q-danger .q-badge{background:var(--red);color:#fff}
+.q-gateable{background:var(--amber-p);border:1.5px solid #d9b08a}
+.q-gateable .q-name{color:var(--amber)}
+.q-gateable .q-examples{color:#7a5030}
+.q-gateable .q-badge{background:var(--amber);color:#fff}
+.q-open{background:var(--blue-p);border:1.5px solid #b0c4e8}
+.q-open .q-name{color:var(--blue)}
+.q-open .q-examples{color:#3a4a7a}
+.q-open .q-badge{background:var(--blue);color:#fff}
+.q-ok{background:var(--teal-p);border:1.5px solid #8cc4be}
+.q-ok .q-name{color:var(--teal)}
+.q-ok .q-examples{color:#2a6060}
+.q-ok .q-badge{background:var(--teal);color:#fff}
+.quad-note{margin-top:14px;padding:10px 16px;background:var(--paper-d);border-left:3px solid var(--amber);font-size:13px;color:var(--ink-m);border-radius:0 2px 2px 0}
+.quad-note strong{color:var(--ink)}
+
+/* PIPELINE DIAGRAM */
+.pipeline-wrap{margin:32px 0;background:#fff;border:1px solid var(--rule);border-radius:4px;padding:28px 28px 24px;max-width:720px}
+.pl-row{display:grid;grid-template-columns:38px 5px 1fr auto;align-items:center;gap:0 12px;padding:10px 0}
+.pl-row+.pl-row{border-top:1px solid var(--paper-d)}
+.pl-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-l);letter-spacing:.08em;text-align:right}
+.pl-bar{width:5px;border-radius:3px;align-self:stretch;min-height:40px}
+.pl-content{}
+.pl-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.pl-desc{font-size:12px;color:var(--ink-l);line-height:1.5}
+.pl-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:2px;white-space:nowrap}
+/* layer colours */
+.l1{background:#4a90a4}.l1t{background:#e8f4f8;color:#2a6080}
+.l2{background:#7a9a5a}.l2t{background:#eef5e8;color:#3a6030}
+.l3{background:#9a7a40}.l3t{background:#f5eed8;color:#6a5020}
+.l4{background:var(--amber)}.l4t{background:var(--amber-p);color:var(--amber)}
+.l5{background:#6a4a8a}.l5t{background:#f0eaf8;color:#4a2a7a}
+
+/* NORMALIZATION PASSES */
+.passes-wrap{margin:28px 0;max-width:700px}
+.pass-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--paper-d)}
+.pass-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.06em;min-width:28px;padding-top:2px}
+.pass-content{}
+.pass-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.pass-what{font-size:12px;color:var(--ink-l);line-height:1.5}
+.pass-catch{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--amber);margin-top:3px}
+
+/* SCHEMA EVOLUTION */
+.schema-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;max-width:700px}
+.schema-box{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:20px}
+.schema-version{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:block}
+.schema-v1 .schema-version{color:var(--ink-l)}
+.schema-v2 .schema-version{color:var(--teal)}
+.schema-field{font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 8px;border-radius:2px;margin-bottom:3px}
+.schema-v1 .schema-field{background:var(--paper-d);color:var(--ink-m)}
+.schema-v2 .schema-field{background:var(--teal-p);color:var(--teal)}
+.schema-label{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.schema-note{font-size:11px;color:var(--ink-l);margin-top:10px;font-style:italic}
+.schema-arrow{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--amber);align-self:center}
+
+/* FAILURE CATALOGUE */
+.catalog-families{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:28px 0;max-width:720px}
+.family-card{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:16px}
+.family-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;padding:2px 7px;border-radius:2px;margin-bottom:8px;display:inline-block}
+.family-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.family-count{font-size:11px;color:var(--ink-l)}
+.family-sev{font-size:11px;margin-top:5px}
+/* family tag colours */
+.f-fab{background:#fde8e4;color:var(--red)}
+.f-inac{background:#fde8e4;color:var(--red)}
+.f-omit{background:var(--blue-p);color:var(--blue)}
+.f-attr{background:var(--amber-p);color:var(--amber)}
+.f-struct{background:#f0eaf8;color:#5a3a8a}
+.f-class{background:var(--teal-p);color:var(--teal)}
+.f-noise{background:var(--paper-d);color:var(--ink-m)}
+.f-fmt{background:var(--paper-d);color:var(--ink-m)}
+.f-ops{background:var(--paper-d);color:var(--ink-l)}
+.f-ux{background:var(--paper-d);color:var(--ink-l)}
+.f-pay{background:var(--paper-d);color:var(--ink-l)}
+.f-sec{background:#fde8e4;color:var(--red)}
+.sev-crit{color:var(--red);font-weight:600}
+.sev-high{color:var(--amber);font-weight:600}
+
+/* EVAL RESULTS TABLE */
+.eval-table-wrap{margin:28px 0;overflow-x:auto;max-width:720px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+thead tr{background:var(--ink);color:#fff}
+thead th{padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+tbody tr{border-top:1px solid var(--paper-d)}
+tbody tr:hover{background:var(--paper-d)}
+tbody td{padding:11px 16px;color:var(--ink-m);vertical-align:top}
+tbody td:first-child{font-weight:500;color:var(--ink)}
+tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
+.stat-good{color:var(--teal);font-weight:600}
+.stat-warn{color:var(--amber);font-weight:600}
+.stat-bad{color:var(--red);font-weight:600}
+.stat-ok{color:var(--blue);font-weight:600}
+
+/* FINDINGS */
+.finding{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:24px;margin:16px 0;max-width:720px;position:relative;padding-left:52px}
+.finding::before{content:attr(data-n);position:absolute;left:18px;top:22px;font-family:'Archivo',system-ui,sans-serif;font-size:28px;font-weight:700;color:var(--rule);line-height:1}
+.finding-head{font-family:'Archivo',system-ui,sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.3}
+.finding p{font-size:14px;margin:0;color:var(--ink-m);max-width:none}
+.finding p strong{color:var(--ink)}
+.finding.danger .finding-head{color:var(--red)}
+.finding.danger{border-left:3px solid var(--red)}
+.finding.amber-f{border-left:3px solid var(--amber)}
+.finding.amber-f .finding-head{color:var(--amber)}
+.finding.blue-f{border-left:3px solid var(--blue)}
+.finding.blue-f .finding-head{color:var(--blue)}
+
+/* NEXT STEPS */
+.next-item{display:grid;grid-template-columns:28px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--paper-d);max-width:700px}
+.next-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);padding-top:2px}
+.next-content{}
+.next-head{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.next-body{font-size:14px;color:var(--ink-m);line-height:1.6}
+.next-body strong{color:var(--ink)}
+.not-next{margin-top:20px;padding:14px 18px;background:var(--paper-d);border-radius:3px;font-size:13px;color:var(--ink-l);max-width:700px}
+.not-next strong{color:var(--ink-m)}
+
+/* REFLECTION */
+.reflection-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0;max-width:720px}
+.r-card{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--amber);border-radius:0 0 4px 4px;padding:20px}
+.r-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.r-card-head{font-family:'Archivo',system-ui,sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.r-card-body{font-size:12px;color:var(--ink-m);line-height:1.55}
+
+/* APPENDIX */
+.appendix{margin-top:56px;padding-top:32px;border-top:1px solid var(--rule)}
+.appendix h2{font-size:18px;margin-bottom:20px}
+.app-links{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:600px}
+.app-link{background:#fff;border:1px solid var(--rule);border-radius:4px;padding:16px 18px;text-decoration:none;transition:border-color .15s,background .15s}
+.app-link:hover{border-color:var(--amber);background:var(--amber-p)}
+.app-link-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.app-link-title{font-size:13px;font-weight:600;color:var(--ink)}
+.app-link-desc{font-size:11px;color:var(--ink-l);margin-top:3px}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  .page{padding:0 20px 80px}
+  .hero{padding:48px 0 40px}
+  .quad-grid{grid-template-columns:1fr}
+  .catalog-families{grid-template-columns:repeat(2,1fr)}
+  .reflection-cards{grid-template-columns:1fr}
+  .schema-compare{grid-template-columns:1fr}
+  .schema-arrow{transform:rotate(90deg)}
+  .app-links{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="pf-nav">
+  <a class="pf-home" href="index.html">Divyanshu Shukla<span class="dot">.</span></a>
+  <div class="pf-nav-links">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a class="pf-cta" href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+  </div>
+  <span class="pf-nav-num">Artifact 06 / 06</span>
+</nav>
+
+<div class="page">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">Artifact 6 — AI Product Build + Evaluation</div>
+  <h1>Building an AI study-notes tool I could actually trust — <em>and auditing where it isn't there yet</em></h1>
+  <p class="hero-sub">LectureSnap converts lecture videos into exam-ready study notes for STEM students. This artifact is less about the product and more about what's underneath it: 106 failure modes, a designed evaluation framework, and the honest gap between the two.</p>
+  <div class="meta-strip">
+    <span class="pill a">Sole PM + Builder</span>
+    <span class="pill">Chrome Extension · Web App · Async Pipeline</span>
+    <span class="pill">Gemini 2.5 Flash / Pro · KaTeX PDF</span>
+    <span class="pill t">6 Lectures Evaluated</span>
+  </div>
+  <div class="sup-links">
+    <a href="https://docs.google.com/document/d/199SSKMNoP1SD939HiCmQc4g9Ydy4pUbLL2X-xIWxy5I/edit?usp=sharing">PRD →</a>
+    <a href="https://docs.google.com/spreadsheets/d/1tm2ap-qYZs3k69dtI2rOB4UV5h4D1Cfw/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">106-Mode Failure Catalogue →</a>
+    <a href="https://github.com/DS-v/Lecture-Notes-AI" target="_blank" rel="noopener">Pipeline + GitHub →</a>
+    <a href="https://docs.google.com/spreadsheets/d/1ADhxhnebaCwp0bZnV5UpZOt90Aqm1wXd/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">Eval Results (xlsx) →</a>
+  </div>
+</section>
+
+<!-- SECTION 1: PROBLEM -->
+<section class="section reveal" id="problem">
+  <span class="s-label">01 — The Problem</span>
+  <h2>Why this domain is interesting — and where it's hard</h2>
+
+  <p>Most AI products are judged by what they can do. The ones people rely on are judged by how they fail — and the worst failures are the silent ones, where the output looks complete and sourced but isn't, and the user can't tell until it's too late to matter.</p>
+  <p>LectureSnap turns lecture videos into exam-ready study notes for STEM students, a domain where a confidently wrong formula is worse than a missing one. I built the working product — Chrome extension, web app, and a five-layer processing pipeline — but the core of this artifact is what sits underneath it: 106 failure modes, grouped into 12 families and graded by how much trust each destroys, and the gap between the evaluation framework I designed and the minimal slice I actually wired and ran.</p>
+
+  <div class="quadrant-wrap reveal">
+    <div class="diag-title">The Failure Surface — What Makes This Domain Hard</div>
+    <div class="quad-outer">
+      <div class="y-axis">↑ How much trust it destroys ↑</div>
+      <div class="quad-inner">
+        <div class="x-labels">
+          <span class="x-label">Invisible to student</span>
+          <span class="x-label">Visible to student</span>
+        </div>
+        <div class="quad-grid">
+          <div class="q-cell q-danger">
+            <div class="q-name">Damaging + Invisible</div>
+            <div class="q-examples">A subtly wrong formula that renders cleanly. An AI-added derivation step tagged as "the lecturer said it." The student can't tell — until the exam.</div>
+            <span class="q-badge">Inaccuracy · Mis-attribution</span>
+          </div>
+          <div class="q-cell q-gateable">
+            <div class="q-name">Damaging + Visible</div>
+            <div class="q-examples">An invented formula that contradicts the slide, or fails to render. The student sees the problem immediately.</div>
+            <span class="q-badge">Fabrication — gateable</span>
+          </div>
+          <div class="q-cell q-open">
+            <div class="q-name">Recoverable + Invisible</div>
+            <div class="q-examples">A concept quietly dropped. A diagram never captured. The student can't audit for what they don't know is missing.</div>
+            <span class="q-badge">Omission — open problem</span>
+          </div>
+          <div class="q-cell q-ok">
+            <div class="q-name">Recoverable + Visible</div>
+            <div class="q-examples">An empty section. A formatting error. A missing timestamp. The student notices and adapts.</div>
+            <span class="q-badge">Format / Noise</span>
+          </div>
+        </div>
+        <div class="quad-note">
+          <strong>The eval below confirmed:</strong> the pipeline holds fabrication near zero — 0 invented formulas across 47. The live failure is omission, which is the safer direction to fail in but neither fully fixable nor yet detectable.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>The success metric stays blunt: <strong><em>can a student pass the exam from the PDF alone, without rewatching the lecture?</em></strong></p>
+</section>
+<hr class="rule">
+
+<!-- SECTION 2: WHAT I BUILT -->
+<section class="section reveal" id="build">
+  <span class="s-label">02 — What I Built</span>
+  <h2>Three surfaces, one five-layer pipeline</h2>
+
+  <p>LectureSnap has three surfaces: a <strong>Chrome extension</strong> as the entry point (it scrapes captions and relays the user's session), a <strong>web dashboard</strong> for auth, credits, and PDF download, and an <strong>async pipeline worker</strong> doing the processing in five layers.</p>
+  <p>A 50-minute lecture becomes a 10–16 page PDF in 5–7 minutes for roughly <strong>$0.05–0.15 in model cost</strong>. Output is concept cards — definition, intuition, worked example, common pitfalls, formulas — plus a cheat sheet, practice questions, and exam strategy.</p>
+
+  <div class="pipeline-wrap reveal">
+    <div class="diag-title">Five-Layer Pipeline — Each Layer a Separable Concern</div>
+    <div class="pl-row">
+      <span class="pl-num">L1</span><div class="pl-bar l1"></div>
+      <div class="pl-content"><div class="pl-name">Ingest</div><div class="pl-desc">yt-dlp + PO token, ffmpeg adaptive scene detection, perceptual hash dedup, sharpness scoring</div></div>
+      <span class="pl-tag l1t">30–50 frames / hr</span>
+    </div>
+    <div class="pl-row">
+      <span class="pl-num">L2+3</span><div class="pl-bar l2"></div>
+      <div class="pl-content"><div class="pl-name">Classify + OCR</div><div class="pl-desc">Gemini Flash, batched 5 frames per call — slide / whiteboard / diagram / code / non-informational + LaTeX extraction</div></div>
+      <span class="pl-tag l2t">~10 calls / hr lecture</span>
+    </div>
+    <div class="pl-row">
+      <span class="pl-num">L4</span><div class="pl-bar l3"></div>
+      <div class="pl-content"><div class="pl-name">Transcribe</div><div class="pl-desc">YouTube captions-first (78% of lectures). ASR fallback via Gemini Flash audio, chunked at 15-min boundaries</div></div>
+      <span class="pl-tag l3t">Captions = free</span>
+    </div>
+    <div class="pl-row">
+      <span class="pl-num">L5</span><div class="pl-bar l4"></div>
+      <div class="pl-content"><div class="pl-name">Synthesize</div><div class="pl-desc">Pass A concept extraction (windowed) → 13 deterministic normalization passes → Pass B concept cards (Flash, Pro on opt-in) → Pass E back-matter</div></div>
+      <span class="pl-tag l4t">The hard layer</span>
+    </div>
+    <div class="pl-row">
+      <span class="pl-num">PDF</span><div class="pl-bar l5"></div>
+      <div class="pl-content"><div class="pl-name">Render</div><div class="pl-desc">Puppeteer + server-side KaTeX — no CDN race. Dual renderer for V1/V2 schema compat. Dynamic block types, not fixed sections</div></div>
+      <span class="pl-tag" style="background:#f0eaf8;color:#4a2a7a">10–16 pages</span>
+    </div>
+  </div>
+
+  <div class="honest">
+    <div class="honest-label">Honest Status</div>
+    <p>Functionally complete. Run across many lectures including the six evaluated below. <strong>Not user-tested at scale</strong> — no traction claim. This artifact is about the build and its quality surface, not adoption.</p>
+  </div>
+</section>
+<hr class="rule">
+
+<!-- SECTION 3: DECISIONS -->
+<section class="section reveal" id="decisions">
+  <span class="s-label">03 — Five Decisions</span>
+  <h2>What shaped the product — and what each decision cost</h2>
+
+  <h3>3.1 — Chrome extension instead of paste-a-URL</h3>
+  <p>The obvious design is a text box: paste a YouTube link, get a PDF. It broke immediately. YouTube aggressively blocks datacenter IPs — a server calling <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--paper-d);padding:1px 5px;border-radius:2px">yt-dlp</code> from Railway gets bot-challenged. Course platforms are auth-walled. Asking users to upload 200MB–2GB videos is bad UX and expensive storage.</p>
+  <p>The fix wasn't a feature — it was an architectural pivot: do the download-adjacent work in the user's browser. The extension uses the user's residential IP and authenticated session, scrapes captions client-side, relays only what the server needs.</p>
+  <div class="callout"><p><strong>Bought:</strong> bot-challenge disappears, auth-walled platforms become reachable, no upload step. <strong>Cost:</strong> real extension complexity, three sign-in paths, a cookie-rotation problem still handled clumsily. Otter, Tactiq, and Notta converged on the same architecture — which I take as validation the constraint, not cleverness, drove the answer.</p></div>
+
+  <h3>3.2 — Concept-organized synthesis instead of time-sliced</h3>
+  <p>The first synthesis pipeline sliced the transcript by time and summarized each slice. Output read like a transcript of the lecturer — "then he said X, then he wrote Y" — which is narration, not study material.</p>
+  <p>I changed the <em>unit of synthesis</em> from time to concept: extract canonical concept entities first, then build one card per concept by fusing every transcript window and visual extract where that concept appears.</p>
+  <div class="callout"><p><strong>Bought:</strong> notes organized by topic — everything about "F1 Score" in one place even if the lecturer returned to it three times. <strong>Cost:</strong> a harder extraction problem and the entire normalization layer described next.</p></div>
+
+  <h3>3.3 — Deterministic normalization on top of stochastic output</h3>
+  <p>This is the least visible decision and the one I'd most want a technical interviewer to see. The concept extractor is non-deterministic and wrong in predictable ways: it promotes passing mentions to full concepts, splits one concept across two names, treats sub-aspects as top-level, and orders by when things were said rather than how they build.</p>
+  <p>So the model's output isn't the answer — it's a <em>candidate set</em>. Thirteen deterministic passes run after it, in sequence, each shrinking or restructuring the set, each existing because something specific broke.</p>
+  <div class="passes-wrap reveal">
+    <div class="pass-row"><span class="pass-num">01</span><div class="pass-content"><div class="pass-name">filterMetaConcepts</div><div class="pass-what">Drops title-echo concepts — e.g. "Counting" in a lecture literally titled <em>Counting</em></div><div class="pass-catch">PA-9, PA-24</div></div></div>
+    <div class="pass-row"><span class="pass-num">02</span><div class="pass-content"><div class="pass-name">filterAgendaConcepts</div><div class="pass-what">Removes thin agenda headers ("Introduction to Y", "Measurement of X") with minimal content</div><div class="pass-catch">PA-11</div></div></div>
+    <div class="pass-row"><span class="pass-num">03</span><div class="pass-content"><div class="pass-name">collapseKnownAliases</div><div class="pass-what">Hand-curated map: "Class Imbalance Problem" → "Class Imbalance"; propagates aliases onto canonical</div><div class="pass-catch">PA-7, PA-8</div></div></div>
+    <div class="pass-row"><span class="pass-num">04</span><div class="pass-content"><div class="pass-name">detectShorthandAliases</div><div class="pass-what">Knowledge-base-free initialism merging: "MLP" + "Multi-Layer Perceptron", "SFC" + "Specific Fuel Consumption"</div><div class="pass-catch">PA-20</div></div></div>
+    <div class="pass-row"><span class="pass-num">05</span><div class="pass-content"><div class="pass-name">routeKnownSubConcepts</div><div class="pass-what">TP / FP / FN / TN, Platt / isotonic — routes to Confusion Matrix via SUBCONCEPT_RULES regex</div><div class="pass-catch">PA-4</div></div></div>
+    <div class="pass-row"><span class="pass-num">06–07</span><div class="pass-content"><div class="pass-name">foldNotationSubConcepts + foldParentConceptSubconcepts</div><div class="pass-what">Pattern-recognition folds: "Pre-activation (Z_JL)" → under Pre-activation; "Brake output (Heat Balance)" → under Heat Balance</div><div class="pass-catch">PA-13, PA-16</div></div></div>
+    <div class="pass-row"><span class="pass-num">08</span><div class="pass-content"><div class="pass-name">dedupBySemanticOverlap</div><div class="pass-what">Sibling duplicate detection: name-Jaccard ≥ 0.4 AND range overlap ≥ 50% AND token containment check (prevents false merges)</div><div class="pass-catch">PA-12, PA-23, PA-26</div></div></div>
+    <div class="pass-row"><span class="pass-num">09</span><div class="pass-content"><div class="pass-name">dedupByNameIdentity</div><div class="pass-what">Time-disjoint duplicates: "Mechanical Tachometer [670s]" + "Mechanical Tachometer (Speed) [2580s]" → merge</div><div class="pass-catch">PA-17, PA-23</div></div></div>
+    <div class="pass-row"><span class="pass-num">10</span><div class="pass-content"><div class="pass-name">foldContainedConcepts</div><div class="pass-what">Whole concept fully inside another's time range → fold under parent. "Worked Example [560–740]" under "Permutations [400–1000]"</div><div class="pass-catch">PA-22, PA-27</div></div></div>
+    <div class="pass-row"><span class="pass-num">11</span><div class="pass-content"><div class="pass-name">enforceMECETimeSegments</div><div class="pass-what">Strips non-primary segments of concept A that overlap concept B's primary by ≥ 50%. The host topic owns the moment.</div><div class="pass-catch">PA-21</div></div></div>
+    <div class="pass-row"><span class="pass-num">12</span><div class="pass-content"><div class="pass-name">demoteSmallToSubconcept</div><div class="pass-what">Concepts spanning &lt; 2 min folded under containing parent (strict containment, then max-overlap fallback)</div><div class="pass-catch">PA-19</div></div></div>
+    <div class="pass-row"><span class="pass-num">13</span><div class="pass-content"><div class="pass-name">filterTinyPassingMentions</div><div class="pass-what">Tiered survival: ≥ 120s → keep; 60–120s + (≥ 1 sub OR multi-segment) → keep; &lt; 60s + ≥ 2 subs → keep; else drop</div><div class="pass-catch">PA-19, PA-25</div></div></div>
+  </div>
+  <div class="callout"><p><strong>Bought:</strong> structure the model can't reliably produce on its own. <strong>Cost:</strong> roughly half the synthesis pipeline complexity lives here. The lesson generalizes: <strong>the deterministic scaffolding around an LLM often carries as much product weight as the model call itself.</strong></p></div>
+
+  <h3>3.4 — Dynamic block schema instead of fixed sections</h3>
+  <p>The first concept-card schema had fixed fields — definition, formula, example. It couldn't represent a concept with three formulas and no example without either truncating or emitting awkward empty sections.</p>
+
+  <div class="schema-compare reveal">
+    <div class="schema-box schema-v1">
+      <span class="schema-version">V1 — Fixed Fields</span>
+      <div class="schema-label">Rigid. Always emits all fields.</div>
+      <div class="schema-field">definition: string</div>
+      <div class="schema-field">formula: string | null</div>
+      <div class="schema-field">example: string | null</div>
+      <div class="schema-field">pitfall: string | null</div>
+      <div class="schema-note">A 3-formula concept truncates. A definition-only concept emits empty sections. 24-page PDFs from 50-min lectures.</div>
+    </div>
+    <div class="schema-arrow">→</div>
+    <div class="schema-box schema-v2">
+      <span class="schema-version">V2 — Dynamic Block Array</span>
+      <div class="schema-label">The model picks block order and shape.</div>
+      <div class="schema-field">{ type: "setup" | "intuition" | "why"</div>
+      <div class="schema-field">  | "formula" | "deriv_step"</div>
+      <div class="schema-field">  | "example" | "pitfall"</div>
+      <div class="schema-field">  | "qa" | "diagram" | "note" }</div>
+      <div class="schema-note">Empty types don't render. 12–14 pages. Visual treatment (amber pitfalls, blue formulas) carries meaning without labels.</div>
+    </div>
+  </div>
+  <div class="callout"><p><strong>Schema design is product design.</strong> The V1→V2 shift changed what the model could express, not just how output was formatted.</p></div>
+
+  <h3>3.5 — Source attribution as a first-class trust feature</h3>
+  <p>Because the tool augments — filling in steps the lecturer skipped, adding intuition the lecturer assumed — every block carries a source tag: <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--teal-p);padding:1px 6px;border-radius:2px;color:var(--teal)">lecture</code> or <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--amber-p);padding:1px 6px;border-radius:2px;color:var(--amber)">derived</code>. The PDF renders subtle badges so a student knows which formula came off the slide and which the model added.</p>
+  <div class="callout"><p>In a domain where mis-attribution is one of the dangerous-and-invisible failures, this is the central trust mechanism. The eval below reveals it's currently <strong>miscalibrated in the too-confident direction</strong> — covered honestly in Section 5.</p></div>
+</section>
+<hr class="rule">
+
+<!-- SECTION 4: FAILURE CATALOGUE -->
+<section class="section reveal" id="catalog">
+  <span class="s-label">04 — The Failure Catalogue</span>
+  <h2>106 failure modes, 12 families, graded by trust damage</h2>
+
+  <p>Most of what makes this product trustworthy is invisible in the output. The failure catalogue makes it legible: 106 distinct failure modes observed across the build, grouped into families, each graded by how much trust it destroys rather than how often it occurs.</p>
+  <p>Every mode names the pipeline stage, a real example, the root cause, and the eval that <em>should</em> detect it. (Honest note: the detection column is a design — the eval section is precise about which are actually wired.)</p>
+
+  <div class="catalog-families reveal">
+    <div class="family-card">
+      <span class="family-tag f-fab">FAB</span>
+      <div class="family-name">Fabrication</div>
+      <div class="family-count">6 modes</div>
+      <div class="family-sev"><span class="sev-crit">3 Critical</span> · 2 High · 1 Med</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-inac">INAC</span>
+      <div class="family-name">Inaccuracy</div>
+      <div class="family-count">14 modes</div>
+      <div class="family-sev"><span class="sev-crit">3 Critical</span> · 5 High · 6 Med</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-omit">OMIT</span>
+      <div class="family-name">Omission</div>
+      <div class="family-count">12 modes</div>
+      <div class="family-sev"><span class="sev-high">7 High</span> · 5 Med</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-attr">ATTR</span>
+      <div class="family-name">Mis-attribution</div>
+      <div class="family-count">3 modes</div>
+      <div class="family-sev"><span class="sev-high">3 High</span></div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-struct">STRUCT</span>
+      <div class="family-name">Mis-structuring</div>
+      <div class="family-count">19 modes — largest family</div>
+      <div class="family-sev">2 High · 14 Med · 3 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-class">CLASS</span>
+      <div class="family-name">Mis-classification</div>
+      <div class="family-count">5 modes</div>
+      <div class="family-sev">1 High · 3 Med · 1 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-noise">NOISE</span>
+      <div class="family-name">Noise</div>
+      <div class="family-count">9 modes</div>
+      <div class="family-sev">3 High · 6 Med</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-fmt">FMT</span>
+      <div class="family-name">Format</div>
+      <div class="family-count">13 modes</div>
+      <div class="family-sev">2 High · 8 Med · 3 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-ops">OPS</span>
+      <div class="family-name">Operational</div>
+      <div class="family-count">12 modes</div>
+      <div class="family-sev">3 High · 6 Med · 3 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-ux">UX</span>
+      <div class="family-name">UX</div>
+      <div class="family-count">3 modes</div>
+      <div class="family-sev">2 Med · 1 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-pay">PAY</span>
+      <div class="family-name">Payments</div>
+      <div class="family-count">8 modes</div>
+      <div class="family-sev">3 High · 4 Med · 1 Low</div>
+    </div>
+    <div class="family-card">
+      <span class="family-tag f-sec">SEC</span>
+      <div class="family-name">Security</div>
+      <div class="family-count">2 modes</div>
+      <div class="family-sev"><span class="sev-crit">1 Critical</span> · 1 High</div>
+    </div>
+  </div>
+
+  <p>Three families tell the story. <strong>FAB and INAC</strong> — the dangerous quadrant from Section 1 — are the ones that destroy trust outright; graded Critical because correct-looking wrong content is unrecoverable. <strong>OMIT</strong> tops out at High, not Critical — incomplete is safer than poisoned, but it's invisible to the student and partly unrecoverable. <strong>STRUCT</strong> is the largest family (19 modes) and almost entirely observed — it's exactly the surface the 13 normalization passes fight, and where most of the build's iteration went.</p>
+
+  <p>The catalogue is fed by a lightweight issue tracker with stable IDs (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-d);padding:1px 5px;border-radius:2px">PA-9</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-d);padding:1px 5px;border-radius:2px">PB-15</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-d);padding:1px 5px;border-radius:2px">PE-1</code>) split across resolved, open, and eval-batch buckets. Findings from an eval run start in the eval-batch bucket and graduate into resolved (when fixed) or open (long-tail). Every fix has a regression target; every known weakness has a home. <a href="https://docs.google.com/spreadsheets/d/1tm2ap-qYZs3k69dtI2rOB4UV5h4D1Cfw/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true" style="color:var(--amber);text-decoration:none;border-bottom:1px solid var(--amber-m)">Full catalogue — 106 modes →</a></p>
+</section>
+<hr class="rule">
+
+<!-- SECTION 5: EVAL -->
+<section class="section reveal" id="eval">
+  <span class="s-label">05 — The Eval</span>
+  <h2>What I designed versus what I shipped</h2>
+
+  <p><strong>What I designed.</strong> A four-tier evaluation framework: Tier 1 deterministic code checks on every job, Tier 2 LLM-as-judge for quality dimensions, Tier 3 reference-diff against golden fixtures, Tier 4 human verification. Specified per pipeline layer in the PRD.</p>
+  <p><strong>What I actually shipped.</strong> A minimal, honest slice — not the whole thing, explicitly <strong>not CI-gated</strong>. Layer 1 deterministic checks live in-database as SQL views over per-job diagnostics. And a Layer 5 LLM-as-judge batch: 8-dimension rubric, run by an out-of-family judge (Claude, not Gemini, to avoid self-preference bias), structured JSON output with inline evidence fields for spot-checking. Run once, across six lectures. Two of six spot-checked against source material.</p>
+
+  <div class="honest">
+    <div class="honest-label">Six Lectures</div>
+    <p>ML theory (CS229, two lectures), MIT probability, IC-engines (NPTEL), biochemistry (IIT-KGP). Three with handwritten notes as reference, three with lecture screenshots. May 2026.</p>
+  </div>
+
+  <h3>Results — N = 6</h3>
+  <div class="eval-table-wrap reveal">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Mean</th>
+          <th>Range</th>
+          <th>Read</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Concept recall</td><td class="stat-warn">75%</td><td>44–100%</td><td>Worst on dense lectures — IC Engines hit 44%</td></tr>
+        <tr><td>Concept precision</td><td class="stat-good">86%</td><td>70–100%</td><td>Few spurious concepts; normalization layer working</td></tr>
+        <tr><td>Sub-concept routing</td><td class="stat-warn">75%</td><td>70–88%</td><td>~1 in 4 misrouted — deterministic-rule coverage gap</td></tr>
+        <tr><td>Formula recall</td><td class="stat-bad">69%</td><td>50–92%</td><td>Consistently leaves ~30% of formulas on the table</td></tr>
+        <tr><td>Formula grounded</td><td class="stat-good">100%</td><td>—</td><td>0 invented formulas across 47 total</td></tr>
+        <tr><td>Lecture-tag precision</td><td class="stat-warn">90%</td><td>86–94%</td><td>Direction of error matters — see finding 3</td></tr>
+        <tr><td>Derived-tag precision</td><td class="stat-good">100%</td><td>—</td><td>When it says "derived," it is</td></tr>
+        <tr><td>Pitfalls real</td><td class="stat-good">91%</td><td>67–100%</td><td>Augmented pitfalls mostly hold up</td></tr>
+        <tr><td>In-card Q&A</td><td class="stat-bad">0</td><td>—</td><td>Should not be zero — see finding 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Three findings worth naming</h3>
+
+  <div class="finding amber-f reveal" data-n="1">
+    <div class="finding-head">The pipeline fails in the safer direction — but not the easier one</div>
+    <p>Zero invented formulas across 47. Zero fabricated Q&A. The error is almost entirely omission — missing concepts, missing formulas — not invention. Failing by omission is <em>less catastrophic</em> than failing by fabrication: an incomplete note is recoverable in a way a poisoned one isn't. But "less catastrophic" is not "easy to fix." Some omission is a recall problem addressable with window-boundary work; some isn't fixable downstream at all — a diagram the vision pass never captured, or a formula only stated aloud, can't be recovered by tuning synthesis. And all of it is invisible to the student. So: good news on the axis that matters most, paired with an honest limit.</p>
+  </div>
+
+  <div class="finding danger reveal" data-n="2">
+    <div class="finding-head">Two card features had silently gone missing</div>
+    <p>Across all six lectures, in-card Q&A blocks and prerequisite content came back at zero — despite both being in the schema. This is a regression: Pass B had stopped emitting two feature classes, and nothing in production logging flagged it. The eval caught it on its first run. A 30-line deterministic check counting these blocks per job would have caught it in real time instead of weeks later in an offline batch. <strong>This is the single strongest argument for why eval-gated CI matters.</strong></p>
+  </div>
+
+  <div class="finding blue-f reveal" data-n="3">
+    <div class="finding-head">My own calibration fix overcorrected</div>
+    <p>Earlier in the build, source tags skewed <em>too humble</em> — the model labeled things the lecturer directly stated as <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--blue-p);padding:1px 5px;border-radius:2px;color:var(--blue)">derived</code>. I fixed it with prompt calibration. The eval shows the fix pushed past center: three of six lectures now skew <strong>too confident</strong> (tagging AI-derived content as <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--teal-p);padding:1px 5px;border-radius:2px;color:var(--teal)">lecture</code>), and none skew humble. Same bug, opposite direction. One round of calibration moved the bias rather than removing it.</p>
+  </div>
+
+  <div class="honest" style="margin-top:24px">
+    <div class="honest-label">Caveats</div>
+    <p>N = 6; pre-production batch evaluation, not statistically powered observability. Single judge with its own biases. Three of six references are screenshots — weaker ground truth than handwritten notes. Pedagogical accuracy is low-confidence by design — verifying whether a pitfall is real needs subject expertise the judge doesn't reliably have.</p>
+  </div>
+</section>
+<hr class="rule">
+
+<!-- SECTION 6: NEXT -->
+<section class="section reveal" id="next">
+  <span class="s-label">06 — What's Next</span>
+  <h2>Four moves, in an order that matters</h2>
+
+  <div class="next-item">
+    <span class="next-num">01</span>
+    <div class="next-content">
+      <div class="next-head">Scale the eval — and treat criteria drift as a feature</div>
+      <div class="next-body">Six lectures show direction, not stable rates. Running thirty more naively misleads because as you grade more cases, your definition of "good" shifts — <strong>criteria drift</strong>. That's the eval working, not a flaw — each drift is a discovery that the rubric was underspecified. What you manage isn't the learning but the comparability: version the rubric, re-grade earlier lectures under each new version, validate the judge against human labels. Done right, a bigger batch sharpens the rubric <em>and</em> widens the failure catalogue. This comes first because it tells me whether the rest of the list is aimed correctly.</div>
+    </div>
+  </div>
+
+  <div class="next-item">
+    <span class="next-num">02</span>
+    <div class="next-content">
+      <div class="next-head">Wire Layer 5 deterministic checks into CI</div>
+      <div class="next-body">The two silent regressions are the proof that regression detection beats incremental quality gains. Counting block types, source-tag distribution, and formula validity per job is cheap and would have caught finding 2 in real time — the batch finds new failure classes, CI stops known ones recurring.</div>
+    </div>
+  </div>
+
+  <div class="next-item">
+    <span class="next-num">03</span>
+    <div class="next-content">
+      <div class="next-head">Rebalance the source-tag prompt</div>
+      <div class="next-body">Two-sided calibration examples, regression-tested against this batch to see whether the bias centers instead of flipping again.</div>
+    </div>
+  </div>
+
+  <div class="next-item" style="border-bottom:none">
+    <span class="next-num">04</span>
+    <div class="next-content">
+      <div class="next-head">Raise concept recall on dense lectures</div>
+      <div class="next-body">IC-engines (44%) points at Pass A window boundaries missing the back half of long lectures — but this only recovers the <em>fixable</em> slice of omission; a diagram never captured or a formula only spoken aloud stays out of reach.</div>
+    </div>
+  </div>
+
+  <div class="not-next"><strong>Deliberately not next:</strong> diagram-block quality and pedagogical card ordering are open issues, but the eval didn't flag them as headline failures — the right signal they're not yet worth the spend.</div>
+</section>
+<hr class="rule">
+
+<!-- SECTION 7: REFLECTION -->
+<section class="section reveal">
+  <span class="s-label">07 — Reflection</span>
+  <h2>Three things that hardened</h2>
+  <div class="reflection-cards reveal">
+    <div class="r-card">
+      <div class="r-card-num">Pattern 01</div>
+      <div class="r-card-head">Deterministic scaffolding carries as much weight as the model call</div>
+      <div class="r-card-body">The 13 normalization passes do as much to make the output trustworthy as the LLM does to generate it. AI-product portfolios rarely admit how much of the work lives in the non-model layers.</div>
+    </div>
+    <div class="r-card">
+      <div class="r-card-num">Pattern 02</div>
+      <div class="r-card-head">Schema design is product design</div>
+      <div class="r-card-body">The V1→V2 schema shift changed what the model could express, not just how output was formatted. The shape of the schema determines what the model is even able to say.</div>
+    </div>
+    <div class="r-card">
+      <div class="r-card-num">Pattern 03</div>
+      <div class="r-card-head">Eval-first is harder to do than to claim</div>
+      <div class="r-card-body">The framework you design and the framework you ship will always have a gap — and that gap is the most useful product signal you have. On its first run, the minimal eval did the job production logging lacked the discipline to do.</div>
+    </div>
+  </div>
+</section>
+
+<!-- APPENDIX -->
+<div class="appendix">
+  <h2 style="font-family:'Archivo',system-ui,sans-serif;font-size:20px;font-weight:700;margin-bottom:20px;color:var(--ink)">Supplements</h2>
+  <div class="app-links">
+    <a href="https://docs.google.com/document/d/199SSKMNoP1SD939HiCmQc4g9Ydy4pUbLL2X-xIWxy5I/edit?usp=sharing" class="app-link">
+      <div class="app-link-label">PRD</div>
+      <div class="app-link-title">Full Product Requirements</div>
+      <div class="app-link-desc">Includes the comprehensive four-tier eval framework (the designed version)</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1tm2ap-qYZs3k69dtI2rOB4UV5h4D1Cfw/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true" class="app-link">
+      <div class="app-link-label">Failure Catalogue</div>
+      <div class="app-link-title">106 Modes, 12 Families</div>
+      <div class="app-link-desc">Severity, stage, root cause, detecting eval for each</div>
+    </a>
+    <a href="https://github.com/DS-v/Lecture-Notes-AI" target="_blank" class="app-link">
+      <div class="app-link-label">GitHub + Pipeline Docs</div>
+      <div class="app-link-title">Pipeline Architecture</div>
+      <div class="app-link-desc">Layer-by-layer technical doc and full source</div>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1ADhxhnebaCwp0bZnV5UpZOt90Aqm1wXd/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true" class="app-link">
+      <div class="app-link-label">Eval Results</div>
+      <div class="app-link-title">Six-Lecture Batch (xlsx)</div>
+      <div class="app-link-desc">Per-lecture and aggregate — May 2026</div>
+    </a>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<nav class="pf-pager">
+  <a class="prev" href="artifact-5-granola-teardown.html"><span class="k">← Prev · Artifact 05</span><span class="t">The Discipline of Subtraction</span></a>
+  <a class="index" href="index.html#work">All work ↑</a>
+  <a class="next" href="index.html#work"><span class="k">Back to start →</span><span class="t">All six case studies</span></a>
+</nav>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

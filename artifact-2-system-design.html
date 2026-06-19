@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End-to-End Cross-Border Procurement System Design</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1c2433;          /* primary text / dark structures */
+    --ink-soft:#3d4759;     /* secondary text */
+    --paper:#f6f3ec;        /* warm off-white base */
+    --paper-2:#efe9dd;      /* panel fill */
+    --paper-3:#e9e1d1;      /* deeper panel fill */
+    --line:#d6cdba;         /* hairlines on paper */
+    --signal:#c2722b;       /* load-bearing amber/ochre */
+    --signal-deep:#9a571c;
+    --signal-wash:#f0e2cf;  /* faint amber wash */
+    --ghost:#9aa1ad;        /* muted, secondary */
+    --ghost-line:#bfc4cc;
+    --good:#3f7a52;         /* affirmative green, used sparingly */
+    --good-wash:#e3ece2;
+    --bad:#a8462f;          /* failure / irreversibility red */
+    --bad-wash:#f0e0d8;
+    --commit:#5a4a8a;       /* commitment boundary violet, used once */
+    --max:980px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Spectral',Georgia,serif;
+    font-size:18px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 40px;}
+
+  /* ---------- Typographic system ---------- */
+  h1,h2,h3,.eyebrow,.kicker,.label,.lede-num,.tag,.btn{font-family:'Archivo',system-ui,sans-serif;}
+  .eyebrow{
+    font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--signal-deep);
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- Header ---------- */
+  header.masthead{
+    border-bottom:2px solid var(--ink);
+    background:linear-gradient(180deg,var(--paper-2),var(--paper));
+  }
+  .masthead-inner{padding:38px 0 40px;}
+  .top-rule{display:flex;justify-content:space-between;align-items:center;
+    font-family:'Archivo',sans-serif;font-size:12px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+    border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:34px;}
+  .top-rule .dot{color:var(--signal);}
+  h1.title{
+    font-size:clamp(31px,5vw,53px);line-height:1.05;font-weight:800;
+    letter-spacing:-.022em;margin:0 0 22px;color:var(--ink);
+  }
+  h1.title em{font-style:normal;color:var(--signal-deep);}
+  .standfirst{
+    font-size:clamp(18px,2.3vw,21px);color:var(--ink-soft);max-width:44em;
+    line-height:1.56;margin:0;
+  }
+  .standfirst b{color:var(--ink);font-weight:600;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;}
+  .tag{
+    font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    padding:6px 12px;border:1px solid var(--line);border-radius:2px;
+    color:var(--ink-soft);background:var(--paper);
+  }
+  .tag.amber{border-color:var(--signal);color:var(--signal-deep);background:var(--signal-wash);}
+
+  /* ---------- How to read ---------- */
+  .howto{
+    margin:36px 0 0;border:1px solid var(--line);border-left:3px solid var(--signal);
+    background:var(--paper-2);padding:22px 26px;border-radius:3px;
+  }
+  .howto .label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--signal-deep);margin-bottom:12px;}
+  .howto p{margin:8px 0;font-size:16px;color:var(--ink-soft);line-height:1.5;}
+  .howto p:last-child{margin-bottom:0;}
+  .howto p b{color:var(--ink);}
+
+  /* ---------- Section scaffolding ---------- */
+  section{padding:60px 0 4px;}
+  section:first-of-type{padding-top:52px;}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:6px;
+    border-bottom:1px solid var(--line);padding-bottom:16px;}
+  .sec-num{font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;
+    color:var(--signal);letter-spacing:.05em;flex:none;padding-top:5px;}
+  h2{font-size:clamp(23px,3.2vw,31px);font-weight:700;letter-spacing:-.015em;
+    margin:0;color:var(--ink);line-height:1.14;}
+  h3{font-size:19px;font-weight:700;color:var(--ink);margin:32px 0 8px;letter-spacing:-.005em;}
+  p{margin:16px 0;}
+  p.lede{font-size:20px;color:var(--ink-soft);line-height:1.52;margin-top:22px;}
+  strong{font-weight:600;color:var(--ink);}
+  .amber-text{color:var(--signal-deep);font-weight:600;}
+
+  /* ---------- Pull / principle ---------- */
+  .principle{
+    margin:34px 0;padding:28px 32px;background:var(--ink);color:var(--paper);
+    border-radius:5px;position:relative;box-shadow:0 2px 0 var(--signal);
+  }
+  .principle .q{font-family:'Archivo',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:12px;}
+  .principle p{margin:0;font-size:21px;line-height:1.48;font-weight:500;}
+  .principle p em{color:var(--signal);font-style:normal;font-weight:600;}
+
+  /* ---------- Figure frame ---------- */
+  figure{margin:38px 0;}
+  .fig-frame{border:1px solid var(--line);background:var(--paper-2);border-radius:6px;
+    padding:32px 32px 24px;box-shadow:0 1px 2px rgba(28,36,51,.04);}
+  .fig-frame.tall{padding:28px 28px 20px;}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-family:'Archivo',sans-serif;font-size:13.5px;line-height:1.55;
+    color:var(--ink-soft);margin-top:18px;padding-top:14px;border-top:1px solid var(--line);}
+  figcaption b{color:var(--signal-deep);font-weight:700;}
+
+  /* ---------- Two-column expectation/reality blocks ---------- */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:30px 0;
+    border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(28,36,51,.04);}
+  .duo > div{padding:24px 26px;}
+  .duo .exp{background:var(--paper-2);border-right:1px solid var(--line);}
+  .duo .rea{background:var(--signal-wash);}
+  .duo .label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;}
+  .duo .exp .label{color:var(--ghost);}
+  .duo .rea .label{color:var(--signal-deep);}
+  .duo p{margin:0;font-size:16px;line-height:1.55;}
+  .duo .exp p{color:var(--ink-soft);}
+
+  /* ---------- Layer cards grid ---------- */
+  .layer-card{border:1px solid var(--line);border-left:3px solid var(--signal);
+    background:var(--paper-2);border-radius:5px;padding:22px 26px 22px;margin:18px 0;
+    box-shadow:0 1px 2px rgba(28,36,51,.04);}
+  .layer-card.post{border-left-color:var(--bad);}
+  .layer-card .lc-top{display:flex;align-items:baseline;gap:14px;margin-bottom:4px;}
+  .layer-card .lc-n{font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;
+    color:var(--signal-deep);letter-spacing:.07em;text-transform:uppercase;
+    background:var(--signal-wash);padding:3px 9px;border-radius:3px;flex:none;}
+  .layer-card.post .lc-n{color:var(--bad);background:var(--bad-wash);}
+  .layer-card h4{font-family:'Archivo',sans-serif;font-size:18px;font-weight:700;margin:0;color:var(--ink);}
+  .layer-card .q{font-size:15px;color:var(--ink-soft);font-style:italic;margin:10px 0 12px;}
+  .layer-card .body{font-size:15.5px;color:var(--ink-soft);line-height:1.56;}
+  .layer-card .out{display:inline-block;margin-top:16px;font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.02em;background:var(--ink);color:var(--paper);
+    padding:6px 13px;border-radius:3px;}
+  .layer-card.post .out{background:var(--bad);}
+  .layer-card ul.clean{margin:12px 0 0;}
+
+  /* ---------- Phase banner ---------- */
+  .phase-banner{display:flex;align-items:center;gap:16px;margin:24px 0 18px;
+    font-family:'Archivo',sans-serif;}
+  .phase-banner .pill{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:7px 15px;border-radius:3px;flex:none;}
+  .phase-banner.pre .pill{background:var(--good-wash);color:var(--good);border:1px solid var(--good);}
+  .phase-banner.post .pill{background:var(--bad-wash);color:var(--bad);border:1px solid var(--bad);}
+  .phase-banner .desc{font-size:14px;color:var(--ink-soft);line-height:1.4;}
+
+  /* ---------- List ---------- */
+  ul.clean{list-style:none;padding:0;margin:18px 0;}
+  ul.clean li{position:relative;padding:9px 0 9px 28px;font-size:16.5px;color:var(--ink-soft);
+    line-height:1.5;border-bottom:1px dashed var(--line);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{content:"";position:absolute;left:3px;top:17px;width:9px;height:9px;
+    background:var(--signal);border-radius:50%;}
+  ul.clean li b{color:var(--ink);font-weight:600;}
+  ul.clean.danger li::before{background:var(--bad);border-radius:1px;}
+
+  /* ---------- Tradeoff / accept boxes ---------- */
+  .callout{border:1px solid var(--line);border-radius:6px;padding:22px 26px;margin:22px 0;
+    background:var(--paper-2);box-shadow:0 1px 2px rgba(28,36,51,.04);}
+  .callout.accept{border-left:3px solid var(--bad);background:var(--bad-wash);}
+  .callout.alt{border-left:3px solid var(--ink);}
+  .callout .ct{font-family:'Archivo',sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:8px;}
+  .callout.accept .ct{color:var(--bad);}
+  .callout p{margin:10px 0 0;font-size:16px;color:var(--ink-soft);line-height:1.55;}
+  .callout p b{color:var(--ink);}
+
+  /* ---------- Metrics strip ---------- */
+  .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:26px 0;}
+  .metric{border:1px solid var(--line);border-radius:5px;padding:20px 22px;background:var(--paper-2);
+    box-shadow:0 1px 2px rgba(28,36,51,.04);position:relative;overflow:hidden;}
+  .metric::before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--signal);}
+  .metric .mlabel{font-family:'Archivo',sans-serif;font-size:15px;font-weight:700;color:var(--ink);}
+  .metric .mdesc{font-size:14px;color:var(--ink-soft);margin-top:6px;line-height:1.45;}
+
+  /* ---------- Footer ---------- */
+  footer{margin-top:64px;border-top:2px solid var(--ink);padding:30px 0 70px;}
+  footer .fnote{font-family:'Archivo',sans-serif;font-size:13px;color:var(--ink-soft);
+    letter-spacing:.04em;line-height:1.6;}
+  footer .fnote b{color:var(--signal-deep);}
+
+  a.figlink{display:inline-block;margin-top:4px;color:var(--signal-deep);text-decoration:none;
+    border-bottom:1px solid var(--signal);font-weight:600;padding-bottom:1px;}
+  a.figlink:hover{background:var(--signal-wash);}
+
+  @media (max-width:680px){
+    body{font-size:17px;}
+    .wrap{padding:0 22px;}
+    .duo{grid-template-columns:1fr;}
+    .duo .exp{border-right:none;border-bottom:1px solid var(--line);}
+    .metrics{grid-template-columns:1fr;}
+    .fig-frame{padding:18px 16px 14px;}
+  }
+</style>
+<link rel="stylesheet" href="assets/pf-chrome.css">
+</head>
+<body>
+
+<nav class="pf-nav">
+  <a class="pf-home" href="index.html">Divyanshu Shukla<span class="dot">.</span></a>
+  <div class="pf-nav-links">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a class="pf-cta" href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+  </div>
+  <span class="pf-nav-num">Artifact 02 / 06</span>
+</nav>
+
+<!-- ===================== MASTHEAD ===================== -->
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <div class="top-rule">
+      <span>Portfolio Artifact <span class="dot">02</span></span>
+      <span>Platform &amp; Systems Design</span>
+    </div>
+    <h1 class="title">Designing an end-to-end<br>cross-border procurement<br>system <em>as a decision-system</em></h1>
+    <p class="standfirst">
+      Most platforms in this market don't fail because a feature is missing. They fail because a
+      decision is made <b>too early, too late, or without clear ownership</b>. This artifact documents
+      how I structured <b>decisions, risk, and ownership</b> across a messy, ops-heavy market — not a
+      feature walkthrough, but the reasoning underneath one.
+    </p>
+    <div class="meta-row">
+      <span class="tag amber">L3 System Design</span>
+      <span class="tag">9 Decision Layers</span>
+      <span class="tag">Pre-PO / Post-PO</span>
+      <span class="tag">Human-in-the-Loop</span>
+    </div>
+
+    <div class="howto">
+      <div class="label">How to read this</div>
+      <p><b>Quick skim (5 min):</b> Executive summary, the L3 map, and the decision-layer headings.</p>
+      <p><b>Deeper read (10–15 min):</b> Add the decision layers themselves and the human-in-the-loop boundaries.</p>
+      <p>It isn't meant to be read linearly — it's built to be scanned and jumped into.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ===================== 01 EXEC SUMMARY ===================== -->
+<section id="summary">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The thesis: turn operational expertise into platform leverage</h2></div>
+  <p class="lede">
+    The design goal was never to automate the human element away. It was to
+    <span class="amber-text">transform hard-won operational judgment into something a platform can scale</span> —
+    and to be deliberate about where that judgment must stay human.
+  </p>
+  <p>
+    Cross-border trade is defined by three cold-start bottlenecks. Every decision layer in the system
+    exists to strengthen one of them. If a layer didn't serve a pillar, it didn't earn a place in the design.
+  </p>
+
+  <figure>
+    <div class="fig-frame">
+      <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three cold-start pillars">
+        <defs>
+          <style>
+            .pt{font-family:'Archivo',sans-serif;font-weight:800;font-size:16px;fill:#1c2433;}
+            .ps{font-family:'Archivo',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;fill:#9a571c;text-transform:uppercase;}
+            .pb{font-family:'Spectral',serif;font-size:13px;fill:#3d4759;}
+          </style>
+        </defs>
+        <!-- base line -->
+        <line x1="40" y1="262" x2="880" y2="262" stroke="#1c2433" stroke-width="2"/>
+        <!-- pillar 1 -->
+        <rect x="48" y="60" width="256" height="190" rx="4" fill="#efe9dd" stroke="#d6cdba"/>
+        <rect x="48" y="60" width="256" height="6" rx="3" fill="#c2722b"/>
+        <text x="68" y="96" class="ps">Buyer Demand</text>
+        <text x="68" y="122" class="pt">Reliability &amp; Prediction</text>
+        <text x="68" y="156" class="pb">Predictable decision frameworks</text>
+        <text x="68" y="182" class="pb">High-fidelity execution of</text>
+        <text x="68" y="200" class="pb">commercial commitments</text>
+        <text x="68" y="226" class="pb">End-to-end post-commit visibility</text>
+        <!-- pillar 2 -->
+        <rect x="332" y="60" width="256" height="190" rx="4" fill="#efe9dd" stroke="#d6cdba"/>
+        <rect x="332" y="60" width="256" height="6" rx="3" fill="#c2722b"/>
+        <text x="352" y="96" class="ps">Supplier Liquidity</text>
+        <text x="352" y="122" class="pt">Effort &amp; Credibility</text>
+        <text x="352" y="156" class="pb">Qualified, high-intent RFQ signals</text>
+        <text x="352" y="182" class="pb">Minimal marginal effort to quote</text>
+        <text x="352" y="208" class="pb">Settlement &amp; ops risk mitigated</text>
+        <!-- pillar 3 -->
+        <rect x="616" y="60" width="256" height="190" rx="4" fill="#efe9dd" stroke="#d6cdba"/>
+        <rect x="616" y="60" width="256" height="6" rx="3" fill="#c2722b"/>
+        <text x="636" y="96" class="ps">Ops Leverage</text>
+        <text x="636" y="122" class="pt">Standardization &amp; Scale</text>
+        <text x="636" y="156" class="pb">Ambiguity resolved upstream</text>
+        <text x="636" y="182" class="pb">Risk exceptions flagged early</text>
+        <text x="636" y="208" class="pb">Orchestration augmented by</text>
+        <text x="636" y="226" class="pb">software-driven workflows</text>
+        <!-- caption row under line -->
+        <text x="460" y="288" text-anchor="middle" class="pb" style="font-style:italic;">Every decision layer serves one of these three pillars.</text>
+      </svg>
+    </div>
+    <figcaption><b>Fig 1.</b> The three cold-start bottlenecks the architecture is built to relieve. They are the load-bearing requirements — features without a pillar were cut.</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 02 L3 OVERVIEW ===================== -->
+<section id="l3">
+  <div class="sec-head"><span class="sec-num">02</span><h2>The L3 map: two phases, nine decision layers</h2></div>
+  <p class="lede">
+    An L3 design is about <span class="amber-text">responsibilities, decision boundaries, and stateful
+    objects</span> — not boxes-and-arrows for their own sake. The system splits into two phases with
+    fundamentally different risk profiles.
+  </p>
+
+  <div class="duo">
+    <div class="exp">
+      <div class="label">Pre-PO — Decision Formation</div>
+      <p>Decisions are exploratory and <b>reversible</b>. The cost of a wrong call is a redo, not a loss. Automation can lean forward here.</p>
+    </div>
+    <div class="rea">
+      <div class="label">Post-PO — Execution Under Commitment</div>
+      <p>Decisions are <b>binding and risk-bearing</b>. Legal, financial, and reputational exposure is live. Automation must defer to humans at every irreversible edge.</p>
+    </div>
+  </div>
+
+  <p>
+    Each layer answers <strong>exactly one question</strong> and produces <strong>one concrete system
+    object</strong>. That discipline is what keeps ownership legible: if you can name the object a layer
+    emits, you can name who is accountable for it.
+  </p>
+
+  <!-- ====== THE BIG L3 SWIMLANE DIAGRAM ====== -->
+  <figure>
+    <div class="fig-frame tall">
+      <svg viewBox="0 30 920 1052" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="L3 swimlane system diagram">
+        <defs>
+          <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#3d4759"/>
+          </marker>
+          <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#9a571c"/>
+          </marker>
+          <style>
+            .ln{font-family:'Archivo',sans-serif;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+            .lq{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;fill:#1c2433;}
+            .lt{font-family:'Spectral',serif;font-size:12.5px;fill:#3d4759;}
+            .ob{font-family:'JetBrains Mono',monospace;font-size:10.5px;fill:#f6f3ec;}
+            .hd{font-family:'Archivo',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;}
+            .xt{font-family:'Archivo',sans-serif;font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;}
+          </style>
+        </defs>
+
+        <!-- Cross-cutting infrastructure rail (left spine) -->
+        <rect x="14" y="80" width="150" height="1000" rx="5" fill="#1c2433"/>
+        <text x="89" y="112" text-anchor="middle" class="hd" fill="#c2722b">Cross-Cutting</text>
+        <text x="89" y="130" text-anchor="middle" class="hd" fill="#c2722b">Infrastructure</text>
+        <line x1="34" y1="146" x2="144" y2="146" stroke="#3d4759"/>
+        <text x="89" y="184" text-anchor="middle" class="xt" fill="#f6f3ec">Comms Fabric</text>
+        <foreignObject x="24" y="194" width="130" height="120">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Spectral,serif;font-size:11px;color:#cfd4db;line-height:1.4;">
+            Archives &amp; surfaces commercial context across channels. Every message tethered to an object. <b style="color:#c2722b;">Monitors state, never executes commitments.</b>
+          </div>
+        </foreignObject>
+        <line x1="34" y1="560" x2="144" y2="560" stroke="#3d4759"/>
+        <text x="89" y="592" text-anchor="middle" class="xt" fill="#f6f3ec">Risk &amp; Delay</text>
+        <text x="89" y="606" text-anchor="middle" class="xt" fill="#f6f3ec">Prediction</text>
+        <foreignObject x="24" y="616" width="130" height="150">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Spectral,serif;font-size:11px;color:#cfd4db;line-height:1.4;">
+            Phase-independent oversight. Live risk-flag stream, fulfilment timelines, delay forecasts, escalation routing. <b style="color:#c2722b;">Risk is a perpetual variable.</b>
+          </div>
+        </foreignObject>
+
+        <!-- PRE-PO PHASE HEADER -->
+        <rect x="184" y="40" width="722" height="30" rx="4" fill="#e3ece2" stroke="#3f7a52"/>
+        <text x="200" y="60" class="ln" fill="#3f7a52">Pre-PO · Decision Formation · reversible</text>
+
+        <!-- Layer node helper geometry: column at x=184..906 -->
+        <!-- L1 -->
+        <g>
+          <rect x="184" y="80" width="722" height="86" rx="5" fill="#efe9dd" stroke="#d6cdba"/>
+          <rect x="184" y="80" width="5" height="86" fill="#c2722b"/>
+          <text x="204" y="104" class="ln" fill="#9a571c">Layer 1 — Intent Formation &amp; Sourceability</text>
+          <text x="204" y="124" class="lq">What are we trying to source, in a form suppliers can quote?</text>
+          <text x="204" y="146" class="lt">RFQ intake structures raw text / docs / drawings → AI normalises specs &amp; flags ambiguity.</text>
+          <rect x="744" y="140" width="146" height="20" rx="3" fill="#1c2433"/>
+          <text x="817" y="154" text-anchor="middle" class="ob">→ Canonical RFQ</text>
+        </g>
+        <!-- L2 -->
+        <g>
+          <rect x="184" y="180" width="722" height="86" rx="5" fill="#efe9dd" stroke="#d6cdba"/>
+          <rect x="184" y="180" width="5" height="86" fill="#c2722b"/>
+          <text x="204" y="204" class="ln" fill="#9a571c">Layer 2 — Supplier Discovery &amp; Liquidity</text>
+          <text x="204" y="224" class="lq">Who can credibly supply this, given real constraints?</text>
+          <text x="204" y="246" class="lt">Retrieval + rules match RFQs to capabilities. Fallback sourcing when coverage is weak.</text>
+          <rect x="704" y="240" width="186" height="20" rx="3" fill="#1c2433"/>
+          <text x="797" y="254" text-anchor="middle" class="ob">→ Supplier–item match set</text>
+        </g>
+        <!-- L3 -->
+        <g>
+          <rect x="184" y="280" width="722" height="80" rx="5" fill="#efe9dd" stroke="#d6cdba"/>
+          <rect x="184" y="280" width="5" height="80" fill="#c2722b"/>
+          <text x="204" y="304" class="ln" fill="#9a571c">Layer 3 — Commercial Signal Collection</text>
+          <text x="204" y="324" class="lq">What are suppliers actually willing to commit to?</text>
+          <text x="204" y="346" class="lt">Line items batched per supplier → quotes structured (price, lead time, terms) → suppliers confirm.</text>
+          <rect x="718" y="332" width="172" height="20" rx="3" fill="#1c2433"/>
+          <text x="804" y="346" text-anchor="middle" class="ob">→ Structured quote set</text>
+        </g>
+        <!-- L4 -->
+        <g>
+          <rect x="184" y="374" width="722" height="116" rx="5" fill="#efe9dd" stroke="#d6cdba"/>
+          <rect x="184" y="374" width="5" height="116" fill="#c2722b"/>
+          <text x="204" y="398" class="ln" fill="#9a571c">Layer 4 — Risk Filtering &amp; Choice Support</text>
+          <text x="204" y="418" class="lq">Which offers are acceptable, and which should we choose?</text>
+          <text x="204" y="440" class="lt"><tspan font-weight="700" fill="#1c2433">Technical approval</tspan> (binary pass/fail) → <tspan font-weight="700" fill="#1c2433">comparison</tspan> (read-only, never mutates supplier state) →</text>
+          <text x="204" y="458" class="lt"><tspan font-weight="700" fill="#1c2433">negotiation</tspan> (state changes, walled off) → <tspan font-weight="700" fill="#1c2433">landed cost</tspan> (rules + learned signals, Ops-validated).</text>
+          <rect x="690" y="464" width="200" height="20" rx="3" fill="#1c2433"/>
+          <text x="790" y="478" text-anchor="middle" class="ob">→ Final quotes + landed cost</text>
+        </g>
+        <!-- L5 commitment boundary -->
+        <g>
+          <rect x="184" y="504" width="722" height="64" rx="5" fill="#ece8f2" stroke="#5a4a8a"/>
+          <rect x="184" y="504" width="5" height="64" fill="#5a4a8a"/>
+          <text x="204" y="528" class="ln" fill="#5a4a8a">Layer 5 — Commitment Boundary</text>
+          <text x="204" y="548" class="lt"><tspan font-weight="700" fill="#1c2433">Order Intent</tspan> — the last reversible state. Everything after carries binding risk.</text>
+          <rect x="744" y="536" width="146" height="20" rx="3" fill="#5a4a8a"/>
+          <text x="817" y="550" text-anchor="middle" class="ob">→ Order Intent</text>
+        </g>
+
+        <!-- The irreversibility line -->
+        <line x1="184" y1="584" x2="906" y2="584" stroke="#a8462f" stroke-width="2" stroke-dasharray="2 5"/>
+        <text x="545" y="580" text-anchor="middle" class="xt" fill="#a8462f">▼  irreversibility threshold — commitment is now binding  ▼</text>
+
+        <!-- POST-PO PHASE HEADER -->
+        <rect x="184" y="600" width="722" height="30" rx="4" fill="#f0e0d8" stroke="#a8462f"/>
+        <text x="200" y="620" class="ln" fill="#a8462f">Post-PO · Execution Under Commitment · binding</text>
+
+        <!-- L6 -->
+        <g>
+          <rect x="184" y="640" width="722" height="92" rx="5" fill="#f3ece9" stroke="#e0ccc4"/>
+          <rect x="184" y="640" width="5" height="92" fill="#a8462f"/>
+          <text x="204" y="664" class="ln" fill="#a8462f">Layer 6 — Execution Planning</text>
+          <text x="204" y="684" class="lq">How should this order be executed?</text>
+          <text x="204" y="706" class="lt">HSN classification · hazardous-goods ID · QC/QAP determination · payment &amp; logistics planning.</text>
+          <text x="204" y="724" class="lt">Ops validates every recommendation before approval.</text>
+          <rect x="744" y="710" width="146" height="20" rx="3" fill="#a8462f"/>
+          <text x="817" y="724" text-anchor="middle" class="ob">→ Execution Plan</text>
+        </g>
+        <!-- L7 -->
+        <g>
+          <rect x="184" y="744" width="722" height="92" rx="5" fill="#f3ece9" stroke="#e0ccc4"/>
+          <rect x="184" y="744" width="5" height="92" fill="#a8462f"/>
+          <text x="204" y="768" class="ln" fill="#a8462f">Layer 7 — Supplier Commitment &amp; Financial Orchestration</text>
+          <text x="204" y="788" class="lq">Are execution participants aligned on the plan?</text>
+          <text x="204" y="810" class="lt">Seller POs generated — <tspan font-weight="700" fill="#1c2433">Ops controls release</tspan>. Invoices &amp; milestones orchestrated.</text>
+          <text x="204" y="828" class="lt">Fund movement happens outside the platform.</text>
+          <rect x="700" y="812" width="190" height="20" rx="3" fill="#a8462f"/>
+          <text x="795" y="826" text-anchor="middle" class="ob">→ Seller PO · Payment state</text>
+        </g>
+        <!-- L8 -->
+        <g>
+          <rect x="184" y="848" width="722" height="128" rx="5" fill="#f3ece9" stroke="#e0ccc4"/>
+          <rect x="184" y="848" width="5" height="128" fill="#a8462f"/>
+          <text x="204" y="872" class="ln" fill="#a8462f">Layer 8 — Shipment Readiness</text>
+          <text x="204" y="892" class="lq">Is this shipment ready to move? (the strongest trust boundary)</text>
+          <text x="204" y="914" class="lt"><tspan font-weight="700" fill="#1c2433">Seller execution</tspan> → <tspan font-weight="700" fill="#1c2433">QC validation</tspan> (AI visual inspection: quantity, defects, labelling) →</text>
+          <text x="204" y="932" class="lt"><tspan font-weight="700" fill="#1c2433">packing validation</tspan> → <tspan font-weight="700" fill="#1c2433">document validation</tspan> (invoice, packing list, e-way bill) →</text>
+          <text x="204" y="950" class="lt"><tspan font-weight="700" fill="#1c2433">buyer dispatch approval</tspan>. Ops validates each gate; third parties loop in as needed.</text>
+          <rect x="730" y="922" width="160" height="20" rx="3" fill="#a8462f"/>
+          <text x="810" y="936" text-anchor="middle" class="ob">→ Dispatch Approval</text>
+        </g>
+        <!-- L9 -->
+        <g>
+          <rect x="184" y="988" width="722" height="80" rx="5" fill="#f3ece9" stroke="#e0ccc4"/>
+          <rect x="184" y="988" width="5" height="80" fill="#a8462f"/>
+          <text x="204" y="1012" class="ln" fill="#a8462f">Layer 9 — Logistics Orchestration &amp; Visibility</text>
+          <text x="204" y="1032" class="lq">How should cargo move, and how do stakeholders stay informed?</text>
+          <text x="204" y="1054" class="lt">Domestic consolidation · freight forwarding · customs coordination · cargo tracking.</text>
+          <rect x="744" y="1012" width="146" height="20" rx="3" fill="#a8462f"/>
+          <text x="817" y="1026" text-anchor="middle" class="ob">→ Shipment State</text>
+        </g>
+
+        <!-- vertical flow connectors between layers -->
+        <g stroke="#3d4759" stroke-width="1.5" fill="none">
+          <line x1="545" y1="166" x2="545" y2="180" marker-end="url(#arrow)"/>
+          <line x1="545" y1="266" x2="545" y2="280" marker-end="url(#arrow)"/>
+          <line x1="545" y1="360" x2="545" y2="374" marker-end="url(#arrow)"/>
+          <line x1="545" y1="490" x2="545" y2="504" marker-end="url(#arrow)"/>
+          <line x1="545" y1="732" x2="545" y2="744" marker-end="url(#arrow)"/>
+          <line x1="545" y1="836" x2="545" y2="848" marker-end="url(#arrow)"/>
+          <line x1="545" y1="976" x2="545" y2="988" marker-end="url(#arrow)"/>
+        </g>
+        <!-- amber connector across the commitment + irreversibility region -->
+        <line x1="545" y1="568" x2="545" y2="640" stroke="#9a571c" stroke-width="1.8" fill="none" stroke-dasharray="4 3" marker-end="url(#arrowAmber)"/>
+
+        <!-- infra side-ties -->
+        <g stroke="#c2722b" stroke-width="1" stroke-dasharray="2 4" opacity="0.7">
+          <line x1="164" y1="300" x2="184" y2="300"/>
+          <line x1="164" y1="640" x2="184" y2="640"/>
+          <line x1="164" y1="900" x2="184" y2="900"/>
+        </g>
+      </svg>
+    </div>
+    <figcaption>
+      <b>Fig 2.</b> The full L3 map — reconstructed faithfully from the system spec. Pre-PO layers (amber) are
+      reversible; the violet <b>commitment boundary</b> marks the last reversible state; below the red dashed
+      <b>irreversibility threshold</b>, every Post-PO layer (red) is binding and Ops-gated. The dark left rail
+      shows the two cross-cutting infrastructures that run across all phases. Each layer emits exactly one
+      stateful object.
+      <br><br>
+      <a class="figlink" href="https://www.figma.com/board/pC3yGEvTrnYVzourPS0YfC/B2B-Procurement-system-design?node-id=0-1" target="_blank" rel="noopener">↗ Interactive Figma board — swimlanes, artifacts &amp; decision boundaries</a>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 03 CROSS-CUTTING ===================== -->
+<section id="infra">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Two infrastructures that run across everything</h2></div>
+  <p class="lede">
+    Some capabilities don't belong to a phase. They sit underneath all of them. Getting their
+    <span class="amber-text">boundaries</span> right matters more than getting their features right.
+  </p>
+
+  <div class="duo">
+    <div class="exp">
+      <div class="label">Communication Fabric</div>
+      <p>Archives and surfaces commercial context across fragmented channels — without trying to replace external tools. Automated triggers handle predictable transitions; manual intervention stays open for nuance; every message is tethered to a system object.</p>
+    </div>
+    <div class="rea">
+      <div class="label">The boundary that matters</div>
+      <p>It <b>monitors state but never executes a commercial commitment.</b> That single rule is what keeps a communication layer from quietly becoming a transaction layer it was never designed to be trusted with.</p>
+    </div>
+  </div>
+
+  <div class="duo">
+    <div class="exp">
+      <div class="label">Risk Flagging &amp; Delay Prediction</div>
+      <p>Phase-independent oversight: identifying systemic risk patterns, modelling probabilistic logistics outcomes, and codifying proactive interventions for high-risk exceptions.</p>
+    </div>
+    <div class="rea">
+      <div class="label">The design philosophy</div>
+      <p><b>Risk is a perpetual variable</b> — actively managed from intent through final settlement, not a check you run once. Outputs: a live risk-flag stream, fulfilment timelines, delay forecasts, escalation routing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 04 PRE-PO LAYERS ===================== -->
+<section id="prepo">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Pre-PO — where decisions are still reversible</h2></div>
+  <div class="phase-banner pre">
+    <span class="pill">Reversible</span>
+    <span class="desc">Exploratory decisions. The cost of being wrong is a redo. Automation can lean forward.</span>
+  </div>
+
+  <div class="layer-card">
+    <div class="lc-top"><span class="lc-n">Layer 1</span><h4>Intent Formation &amp; Sourceability</h4></div>
+    <div class="q">What exactly are we trying to source, in a form suppliers can realistically quote?</div>
+    <div class="body">Buyers submit RFQs with whatever they have — text, documents, drawings. The system parses into structured line items and the buyer confirms intent. AI normalises specs and units, flags ambiguity and conflicts, and raises clarifications when confidence is low. Ops resolves exceptions before any supplier sees the RFQ. <strong>Ambiguity collapses once, upstream</strong>, instead of every supplier interpreting it independently.</div>
+    <span class="out">Output → Canonical RFQ</span>
+  </div>
+
+  <div class="layer-card">
+    <div class="lc-top"><span class="lc-n">Layer 2</span><h4>Supplier Discovery &amp; Liquidity</h4></div>
+    <div class="q">Who can credibly supply this, given the actual constraints?</div>
+    <div class="body">Retrieval and rules match canonical RFQs against known supplier capabilities. The goal isn't perfect ranking — it's avoiding obvious mismatches and surfacing credible options. When coverage or confidence is weak, fallback sourcing triggers. <strong>Discovery can be automated; validation cannot</strong> — Ops verifies legitimacy before a supplier is pulled in. Liquidity here is engineered, not assumed.</div>
+    <span class="out">Output → Supplier–item match set</span>
+  </div>
+
+  <div class="layer-card">
+    <div class="lc-top"><span class="lc-n">Layer 3</span><h4>Commercial Signal Collection</h4></div>
+    <div class="q">What are suppliers actually willing to commit to?</div>
+    <div class="body">Line items are batched per supplier and sent in a form that minimises rework. Suppliers respond however they normally do; the system structures prices, lead times, and terms, and suppliers confirm what was extracted.</div>
+    <span class="out">Output → Structured quote set</span>
+  </div>
+
+  <div class="layer-card">
+    <div class="lc-top"><span class="lc-n">Layer 4</span><h4>Risk Filtering &amp; Choice Support</h4></div>
+    <div class="q">Which offers are acceptable, and which of those should we choose?</div>
+    <div class="body">Four moves, deliberately sequenced and separated:</div>
+    <ul class="clean">
+      <li><b>Technical approval</b> — binary. Quotes pass or they don't, before price ever enters the picture.</li>
+      <li><b>Comparison</b> — read-only. Surfaces tradeoffs across price, lead time, terms, but <b>never mutates supplier state</b> and never decides for the buyer.</li>
+      <li><b>Negotiation</b> — the one place supplier state changes, intentionally walled off from comparison.</li>
+      <li><b>Landed cost</b> — computed from rules and learned signals; Ops validates because errors here propagate downstream.</li>
+    </ul>
+    <span class="out">Output → Final quote set + Landed cost view</span>
+  </div>
+
+  <div class="layer-card" style="border-left-color:var(--commit);">
+    <div class="lc-top"><span class="lc-n" style="color:var(--commit);">Layer 5</span><h4>Commitment Boundary</h4></div>
+    <div class="q">Are we ready to commit commercially?</div>
+    <div class="body">When buyers choose suppliers and terms, the system creates an <strong>Order Intent</strong>. This is the last reversible state in the entire system. Everything after it carries legal, financial, or reputational risk — which is exactly why it gets its own layer rather than being folded into the step before or after.</div>
+    <span class="out" style="background:var(--commit);">Output → Order Intent</span>
+  </div>
+
+  <div class="principle">
+    <div class="q">The line everything pivots on</div>
+    <p>Order Intent is the <em>last reversible state</em>. The architecture is organized around protecting that line — not around any single feature.</p>
+  </div>
+</section>
+
+<!-- ===================== 05 POST-PO LAYERS ===================== -->
+<section id="postpo">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Post-PO — where every decision is binding</h2></div>
+  <div class="phase-banner post">
+    <span class="pill">Binding</span>
+    <span class="desc">Legal, financial, reputational exposure is live. Automation defers to humans at every irreversible edge.</span>
+  </div>
+
+  <div class="layer-card post">
+    <div class="lc-top"><span class="lc-n">Layer 6</span><h4>Execution Planning</h4></div>
+    <div class="q">How should this order be executed?</div>
+    <div class="body">The platform converts a commercial commitment into an executable plan: HSN classification, hazardous-goods identification, QC/QAP requirement determination, supplier payment planning, logistics planning. <strong>Ops validates recommendations before approval.</strong></div>
+    <span class="out">Output → Execution Plan</span>
+  </div>
+
+  <div class="layer-card post">
+    <div class="lc-top"><span class="lc-n">Layer 7</span><h4>Supplier Commitment &amp; Financial Orchestration</h4></div>
+    <div class="q">Are execution participants aligned on the plan?</div>
+    <div class="body">Supplier-specific POs are generated, but <strong>Ops controls final release</strong>. The platform orchestrates supplier invoices, buyer invoices, and payment milestones — while fund movement itself happens outside the platform.</div>
+    <span class="out">Output → Seller PO · Payment state</span>
+  </div>
+
+  <div class="layer-card post">
+    <div class="lc-top"><span class="lc-n">Layer 8</span><h4>Shipment Readiness</h4></div>
+    <div class="q">Is this shipment ready to move?</div>
+    <div class="body">The strongest trust boundary in the platform — a sequence of gates, each Ops-validated:</div>
+    <ul class="clean danger">
+      <li><b>Seller execution</b> — manufacture/procure, prepare docs, ready items for inspection and dispatch.</li>
+      <li><b>QC validation</b> — AI-assisted visual inspection for quantity, visible defects, labelling; third parties loop in for advanced cases.</li>
+      <li><b>Packing validation</b> — checklist-driven review detecting packing non-compliance.</li>
+      <li><b>Document validation</b> — invoice, packing list, e-way bill, dispatch and compliance docs checked for inconsistencies and gaps.</li>
+      <li><b>Buyer dispatch approval</b> — the human authorization that releases the shipment.</li>
+    </ul>
+    <span class="out">Output → Dispatch Approval</span>
+  </div>
+
+  <div class="layer-card post">
+    <div class="lc-top"><span class="lc-n">Layer 9</span><h4>Logistics Orchestration &amp; Visibility</h4></div>
+    <div class="q">How should cargo move, and how do stakeholders stay informed?</div>
+    <div class="body">Domestic consolidation, freight-forwarding coordination, customs coordination, and cargo tracking — keeping every stakeholder current as the shipment moves.</div>
+    <span class="out">Output → Shipment State</span>
+  </div>
+</section>
+
+<!-- ===================== 06 HITL ===================== -->
+<section id="hitl">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Where automation stops — on purpose</h2></div>
+  <p class="lede">
+    There are places where automation simply isn't worth the risk. These aren't gaps in the build —
+    they're <span class="amber-text">deliberate boundaries</span>. Failures here don't degrade UX; they
+    destroy trust, and trust in this market doesn't come back cheaply.
+  </p>
+
+  <figure>
+    <div class="fig-frame">
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Automation confidence vs human-required boundaries">
+        <defs>
+          <style>
+            .ax{font-family:'Archivo',sans-serif;font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;fill:#9aa1ad;}
+            .hl{font-family:'Spectral',serif;font-size:12.5px;fill:#1c2433;}
+            .gd{font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;fill:#3f7a52;}
+            .bd{font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;fill:#a8462f;}
+          </style>
+        </defs>
+        <!-- axis -->
+        <line x1="60" y1="40" x2="60" y2="320" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="50" y="40" text-anchor="end" class="ax" transform="rotate(-90 50 40)"> </text>
+        <text x="40" y="180" text-anchor="middle" class="ax" transform="rotate(-90 40 180)">Irreversibility →</text>
+        <!-- automate zone -->
+        <rect x="60" y="40" width="380" height="280" fill="#e3ece2" opacity="0.5"/>
+        <text x="250" y="62" text-anchor="middle" class="gd">AUTOMATION LEANS FORWARD</text>
+        <!-- human zone -->
+        <rect x="440" y="40" width="440" height="280" fill="#f0e0d8" opacity="0.6"/>
+        <text x="660" y="62" text-anchor="middle" class="bd">HUMAN JUDGMENT REQUIRED</text>
+        <!-- diagonal boundary -->
+        <line x1="440" y1="40" x2="440" y2="320" stroke="#a8462f" stroke-width="2" stroke-dasharray="3 4"/>
+
+        <!-- automate items -->
+        <text x="84" y="100" class="hl">• spec normalization &amp; structuring</text>
+        <text x="84" y="128" class="hl">• ambiguity &amp; conflict detection</text>
+        <text x="84" y="156" class="hl">• supplier retrieval &amp; matching</text>
+        <text x="84" y="184" class="hl">• read-only quote comparison</text>
+        <text x="84" y="212" class="hl">• landed-cost computation</text>
+        <text x="84" y="240" class="hl">• AI visual QC &amp; doc checks</text>
+        <text x="84" y="268" class="hl">• cargo tracking &amp; notifications</text>
+
+        <!-- human items -->
+        <text x="464" y="100" class="hl">• interpreting ambiguous specs</text>
+        <text x="464" y="124" class="hl">• judging supplier legitimacy</text>
+        <text x="464" y="148" class="hl">• validating exception-heavy landed costs</text>
+        <text x="464" y="172" class="hl">• releasing final POs</text>
+        <text x="464" y="196" class="hl">• high-risk commercial decisions</text>
+        <text x="464" y="220" class="hl">• execution-plan &amp; seller-PO release</text>
+        <text x="464" y="244" class="hl">• QC exception approval</text>
+        <text x="464" y="268" class="hl">• dispatch authorization</text>
+        <text x="464" y="292" class="hl">• logistics exception &amp; risk-escalation review</text>
+      </svg>
+    </div>
+    <figcaption><b>Fig 3.</b> The human-in-the-loop map. As irreversibility rises, control shifts from software to people. The dashed boundary is where <b>failure stops being recoverable</b> — and exactly where the design refuses to automate.</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 07 TRADEOFFS ===================== -->
+<section id="tradeoffs">
+  <div class="sec-head"><span class="sec-num">07</span><h2>The tradeoffs I chose — and the ones I rejected</h2></div>
+
+  <h3>Design tradeoffs</h3>
+  <ul class="clean">
+    <li><b>Automation stops where failure becomes irreversible.</b> The threshold is a feature, not a limitation.</li>
+    <li><b>Ops is treated as leverage, not as a failure mode.</b> Human judgment is designed-in, not apologized for.</li>
+    <li><b>Liquidity is qualified before it is scaled.</b> Credibility precedes volume.</li>
+  </ul>
+
+  <div class="callout alt">
+    <div class="ct">Alternative considered — Why not auto-award to the lowest price?</div>
+    <p>Because the cost of failure is <b>asymmetric</b>. A bad cheap award can cost far more than the spread it saved. The system optimizes for risk-adjusted outcomes, not price minima.</p>
+  </div>
+
+  <div class="callout alt">
+    <div class="ct">Alternative considered — Why not fully self-serve PO issuance?</div>
+    <p>Because early trust failures cost more than the ops savings are worth. In a market built on credibility, a self-serve mistake doesn't just cost one order — it costs the relationship.</p>
+  </div>
+
+  <div class="callout accept">
+    <div class="ct">A failure we chose to accept</div>
+    <p>We accepted <b>slower turnaround for edge-case, highly ambiguous RFQs</b>. The alternative was faster throughput at the cost of systemic errors and supplier distrust. We chose correctness and trust over speed at the edges — deliberately, with eyes open.</p>
+  </div>
+</section>
+
+<!-- ===================== 08 METRICS ===================== -->
+<section id="metrics">
+  <div class="sec-head"><span class="sec-num">08</span><h2>What we measured — and what we refused to</h2></div>
+  <p class="lede">
+    We avoided vanity metrics and tracked only what reflected <span class="amber-text">decision quality,
+    supplier effort, and operational leverage</span>.
+  </p>
+  <div class="metrics">
+    <div class="metric">
+      <div class="mlabel">RFQ → valid quote rate</div>
+      <div class="mdesc">Did structured intent actually produce quotable, committable supplier responses?</div>
+    </div>
+    <div class="metric">
+      <div class="mlabel">Time to first confident quote</div>
+      <div class="mdesc">How fast does a buyer reach a quote they can actually trust?</div>
+    </div>
+    <div class="metric">
+      <div class="mlabel">Qualified quotes per RFQ</div>
+      <div class="mdesc">Depth of engineered liquidity — not raw quote count, but credible ones.</div>
+    </div>
+    <div class="metric">
+      <div class="mlabel">Quote → PO conversion</div>
+      <div class="mdesc">Did the choice-support layer lead to commitments that held?</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="q">What this artifact is really demonstrating</div>
+    <p>Not a feature set — a <em>decision-system</em>. The skill on display is knowing where a decision belongs, who owns it, and when software should stop and defer to a human.</p>
+  </div>
+</section>
+
+<nav class="pf-pager">
+  <a class="prev" href="artifact-1-why-platforms-break.html"><span class="k">← Prev · Artifact 01</span><span class="t">Why Cross-Border Procurement Platforms Break</span></a>
+  <a class="index" href="index.html#work">All work ↑</a>
+  <a class="next" href="artifact-3-ai-matching.html"><span class="k">Next · Artifact 03 →</span><span class="t">AI Matching: Reality vs Expectation</span></a>
+</nav>
+
+<footer>
+  <div class="wrap" style="padding:0;">
+    <p class="fnote">Portfolio Artifact 02 · <b>Platform &amp; Systems Design</b> · End-to-End Cross-Border Procurement Intelligence &amp; Orchestration System · L3 decision-oriented view</p>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>

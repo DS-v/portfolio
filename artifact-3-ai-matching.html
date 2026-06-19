@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Matching: Reality vs Expectation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1c2433;          /* primary text / dark structures */
+    --ink-soft:#3d4759;     /* secondary text */
+    --paper:#f6f3ec;        /* warm off-white base */
+    --paper-2:#efe9dd;      /* panel fill */
+    --line:#d6cdba;         /* hairlines on paper */
+    --signal:#c2722b;       /* "reality" — load-bearing amber/ochre */
+    --signal-deep:#9a571c;
+    --ghost:#9aa1ad;        /* "expectation" — muted, ghosted */
+    --ghost-line:#bfc4cc;
+    --good:#3f7a52;         /* affirmative green, used sparingly */
+    --bad:#a8462f;          /* failure red, used sparingly */
+    --max:980px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Spectral',Georgia,serif;
+    font-size:18px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px;}
+
+  /* ---------- Typographic system ---------- */
+  h1,h2,h3,.eyebrow,.kicker,.label,.lede-num{font-family:'Archivo',system-ui,sans-serif;}
+  .eyebrow{
+    font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--signal-deep);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    border-bottom:2px solid var(--ink);
+    padding:78px 0 42px;
+  }
+  .hero .tag{
+    display:inline-block;font-family:'Archivo';font-size:12px;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--paper);
+    background:var(--ink);padding:6px 12px;margin-bottom:26px;
+  }
+  h1{
+    font-size:clamp(38px,7vw,72px);
+    font-weight:800;
+    line-height:.98;
+    letter-spacing:-.02em;
+    margin:0 0 4px;
+  }
+  h1 .rev{
+    display:block;
+    color:var(--ghost);
+    position:relative;
+    width:fit-content;
+  }
+  h1 .rev::after{
+    content:"";position:absolute;left:-2%;right:-2%;top:52%;height:4px;
+    background:var(--bad);transform:rotate(-1.2deg);opacity:.85;
+  }
+  h1 .real{display:block;color:var(--signal);}
+  .hero .sub{
+    font-size:21px;color:var(--ink-soft);max-width:660px;margin:24px 0 0;
+    line-height:1.5;
+  }
+  .hero .meta{
+    margin-top:32px;display:flex;flex-wrap:wrap;gap:10px 26px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);
+    border-top:1px solid var(--line);padding-top:18px;
+  }
+  .hero .meta b{color:var(--ink);font-weight:500;}
+
+  /* ---------- Exec summary band ---------- */
+  .summary{
+    background:var(--ink);color:#e9e4d8;padding:46px 0;
+  }
+  .summary .wrap{max-width:var(--max);}
+  .summary .eyebrow{color:var(--signal);}
+  .summary p{font-size:20px;line-height:1.55;margin:14px 0 0;max-width:720px;color:#e9e4d8;}
+  .summary .thesis{
+    font-family:'Archivo';font-weight:600;font-size:23px;line-height:1.4;
+    color:#fff;margin-top:22px;max-width:740px;
+  }
+  .summary .thesis em{color:var(--signal);font-style:normal;}
+
+  /* ---------- Section scaffolding ---------- */
+  section.body{padding:54px 0 8px;}
+  .sechead{
+    display:flex;align-items:baseline;gap:18px;
+    border-bottom:1.5px solid var(--ink);padding-bottom:12px;margin-bottom:8px;
+  }
+  .secnum{
+    font-family:'Archivo';font-weight:800;font-size:15px;color:var(--signal-deep);
+    letter-spacing:.04em;flex:none;
+  }
+  h2{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.015em;margin:0;line-height:1.05;}
+  h3{
+    font-size:19px;font-weight:700;margin:30px 0 6px;letter-spacing:-.005em;
+    color:var(--ink);
+  }
+  p{margin:14px 0;}
+  .lede{font-size:20px;color:var(--ink-soft);margin-top:18px;}
+  strong{font-weight:600;color:var(--ink);}
+  em.term{font-style:italic;color:var(--signal-deep);font-weight:500;}
+
+  /* expectation vs reality inline blocks */
+  .vs{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;margin:26px 0;
+    border:1.5px solid var(--ink);
+  }
+  .vs > div{padding:20px 22px;}
+  .vs .exp{background:var(--paper-2);border-right:1.5px solid var(--ink);}
+  .vs .rea{background:#fbf8f1;}
+  .vs .h{
+    font-family:'Archivo';font-weight:700;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .vs .exp .h{color:var(--ghost);}
+  .vs .rea .h{color:var(--signal-deep);}
+  .vs .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .vs .exp .dot{background:var(--ghost);}
+  .vs .rea .dot{background:var(--signal);}
+  .vs p{margin:0;font-size:16.5px;line-height:1.5;}
+  .vs .exp p{color:var(--ink-soft);}
+
+  @media(max-width:680px){
+    .vs{grid-template-columns:1fr;}
+    .vs .exp{border-right:none;border-bottom:1.5px solid var(--ink);}
+  }
+
+  /* figure */
+  figure{margin:34px 0;}
+  figure svg{display:block;width:100%;height:auto;
+    border:1.5px solid var(--ink);background:#fbf8f1;}
+  figcaption{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);
+    margin-top:10px;padding-left:2px;line-height:1.5;
+  }
+  figcaption b{color:var(--signal-deep);font-weight:500;}
+
+  /* callout */
+  .callout{
+    border-left:4px solid var(--signal);background:var(--paper-2);
+    padding:16px 20px;margin:26px 0;font-size:17px;
+  }
+  .callout .k{
+    font-family:'Archivo';font-weight:700;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--signal-deep);display:block;margin-bottom:4px;
+  }
+
+  /* key-insight ribbon */
+  .insight{
+    margin:30px 0;padding:18px 22px;border:1.5px dashed var(--ink);
+    font-family:'Archivo';font-weight:600;font-size:18px;line-height:1.45;
+    background:#fbf8f1;
+  }
+  .insight span{color:var(--signal-deep);}
+
+  ul.clean{list-style:none;padding:0;margin:16px 0;}
+  ul.clean li{
+    padding:9px 0 9px 26px;position:relative;border-bottom:1px solid var(--line);
+    font-size:16.5px;line-height:1.5;
+  }
+  ul.clean li::before{
+    content:"";position:absolute;left:2px;top:17px;width:10px;height:2px;background:var(--signal);
+  }
+  ul.clean li b{font-weight:600;}
+
+  .pull{
+    font-family:'Archivo';font-weight:700;font-size:clamp(22px,3.4vw,30px);
+    line-height:1.2;color:var(--ink);margin:40px 0;letter-spacing:-.01em;
+    padding-left:20px;border-left:5px solid var(--signal);
+  }
+
+  footer{
+    border-top:2px solid var(--ink);margin-top:60px;padding:38px 0 70px;
+    font-size:16px;color:var(--ink-soft);
+  }
+  footer .eyebrow{margin-bottom:10px;}
+  footer b{color:var(--ink);}
+
+  /* mono token used inline */
+  .mono{font-family:'JetBrains Mono',monospace;font-size:.86em;
+    background:var(--paper-2);padding:1px 6px;border-radius:2px;color:var(--ink);}
+
+  .divider{height:1px;background:var(--line);margin:46px 0;}
+
+  a{color:var(--signal-deep);}
+</style>
+<link rel="stylesheet" href="assets/pf-chrome.css">
+</head>
+<body>
+
+<nav class="pf-nav">
+  <a class="pf-home" href="index.html">Divyanshu Shukla<span class="dot">.</span></a>
+  <div class="pf-nav-links">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a class="pf-cta" href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+  </div>
+  <span class="pf-nav-num">Artifact 03 / 06</span>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">Artifact 03 · AI / ML Product Judgment</span>
+    <h1>
+      AI Matching:
+      <span class="rev">What everyone expects</span>
+      <span class="real">What actually works</span>
+    </h1>
+    <p class="sub">Designing supplier matching for high-risk B2B procurement — where a wrong match doesn't just hurt UX, it burns a supplier relationship you can't get back.</p>
+    <div class="meta">
+      <span><b>Domain</b> · Cross-border industrial procurement</span>
+      <span><b>Scale</b> · 1–3k suppliers, 10k+ product types</span>
+      <span><b>Read</b> · ~12 min</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ EXEC SUMMARY ============ -->
+<div class="summary">
+  <div class="wrap">
+    <span class="eyebrow">Executive summary</span>
+    <p>How AI supplier matching was designed, constrained, and evaluated inside an ops-heavy B2B procurement system — building on the failure modes in <a href="artifact-1-why-platforms-break.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 1</a> and the sourcing system in <a href="artifact-2-system-design.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 2</a>. Here a wrong match isn't a UX problem: it raises supplier effort, causes regret and ghosting, and lowers willingness to quote on the <em>next</em> RFQ.</p>
+    <p>Three coupled problems run through it — <b style="color:#fff">data formation</b>, <b style="color:#fff">matching</b>, and <b style="color:#fff">decision quality</b>. The design move was the same across all three: cast wide in retrieval, narrow hard through reasoning and confidence floors, and refuse to automate the irreversible calls.</p>
+    <div class="thesis">Core takeaway: most matching failures came not from weak models, but from <em>under-designed data, evaluation, and risk boundaries.</em></div>
+  </div>
+</div>
+
+<!-- ============ 1. THE HYPOTHESIS ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">01</span><h2>The matching hypothesis everyone starts with</h2></div>
+    <p class="lede">The standard AI-marketplace playbook is clean, intuitive, and — in this environment — quietly wrong in its assumptions.</p>
+
+    <p>Embed supplier catalogs. Embed RFQ line items into the same space. Let similarity search surface relevant suppliers. Have an LLM score and rank. Add business rules as guardrails. It's a reasonable hypothesis: manual discovery doesn't scale, and matching looks like the bottleneck.</p>
+
+    <p>What this underestimates isn't modeling complexity. It's <strong>systemic dependency</strong> — messy inputs, supplier incentives, and the asymmetric cost of being wrong. The model was never the hard part. Everything feeding the model was.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The naive pipeline versus where it actually breaks">
+        <defs>
+          <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#1c2433"/>
+          </marker>
+          <marker id="arrG" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#9aa1ad"/>
+          </marker>
+        </defs>
+        <text x="24" y="34" font-family="Archivo" font-weight="700" font-size="13" letter-spacing="1.5" fill="#9aa1ad">THE EXPECTED PIPELINE</text>
+        <!-- boxes -->
+        <g font-family="Archivo" font-size="13" font-weight="600" fill="#3d4759" text-anchor="middle">
+          <rect x="24"  y="52" width="150" height="46" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5"/>
+          <text x="99" y="80">Embed catalogs</text>
+          <rect x="208" y="52" width="150" height="46" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5"/>
+          <text x="283" y="80">Embed RFQs</text>
+          <rect x="392" y="52" width="150" height="46" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5"/>
+          <text x="467" y="80">Similarity search</text>
+          <rect x="576" y="52" width="150" height="46" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5"/>
+          <text x="651" y="80">LLM ranks</text>
+          <rect x="760" y="52" width="136" height="46" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5"/>
+          <text x="828" y="80">Route to supplier</text>
+        </g>
+        <line x1="174" y1="75" x2="206" y2="75" stroke="#9aa1ad" stroke-width="1.5" marker-end="url(#arrG)"/>
+        <line x1="358" y1="75" x2="390" y2="75" stroke="#9aa1ad" stroke-width="1.5" marker-end="url(#arrG)"/>
+        <line x1="542" y1="75" x2="574" y2="75" stroke="#9aa1ad" stroke-width="1.5" marker-end="url(#arrG)"/>
+        <line x1="726" y1="75" x2="758" y2="75" stroke="#9aa1ad" stroke-width="1.5" marker-end="url(#arrG)"/>
+
+        <text x="24" y="150" font-family="Archivo" font-weight="700" font-size="13" letter-spacing="1.5" fill="#9a571c">WHERE IT ACTUALLY BREAKS</text>
+        <g font-family="Spectral" font-size="13" fill="#1c2433">
+          <rect x="24"  y="166" width="372" height="62" fill="#fbf8f1" stroke="#c2722b" stroke-width="1.5"/>
+          <text x="38" y="190" font-weight="600">Inputs are destroyed before the model sees them</text>
+          <text x="38" y="210" fill="#3d4759" font-size="12.5">Tables shred · specs hide in diagrams · brand ≠ brand</text>
+
+          <rect x="414" y="166" width="186" height="62" fill="#fbf8f1" stroke="#c2722b" stroke-width="1.5"/>
+          <text x="428" y="190" font-weight="600">Similarity ≠ supply</text>
+          <text x="428" y="210" fill="#3d4759" font-size="12.5">Close vectors, wrong part</text>
+
+          <rect x="618" y="166" width="278" height="62" fill="#fbf8f1" stroke="#c2722b" stroke-width="1.5"/>
+          <text x="632" y="190" font-weight="600">A wrong match has a cost</text>
+          <text x="632" y="210" fill="#3d4759" font-size="12.5">Supplier regret · ghosting · lost trust</text>
+        </g>
+      </svg>
+      <figcaption><b>Fig 1.</b> The clean pipeline isn't wrong — it's incomplete. Every failure in this system lived in the gap between "embedded" and "actually matchable."</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ 2. WHY CATALOGS ARE MESSY ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">02</span><h2>Why catalogs are messy — and why that's the real problem</h2></div>
+    <p class="lede">Before matching quality can improve, the system needs a <em>truthful</em> representation of what a supplier can actually provide. Forming that proved harder than the matching itself.</p>
+
+    <p>Supplier catalogs are PDFs, Excel files, scanned brochures, and WhatsApp images — marketing-oriented, not operationally complete, highlighting strengths rather than boundaries. The dominant failure mode is <strong>structural, not syntactic</strong>: naive parsing produces records that are clean but semantically empty.</p>
+
+    <h3>The structural traps that defeat naive extraction</h3>
+    <p>Across real catalogs — conveyor belting, gearboxes, insulating mats, plywood — the failures cluster into <strong>three families</strong>. None is a chunking problem; each is a way the document's structure carries meaning that flat text extraction destroys before any model sees it.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three families of structural extraction traps found across real catalogs">
+        <style>
+          .fam{font-family:Archivo;font-weight:800;font-size:13px;fill:#9a571c;letter-spacing:.5px;}
+          .ttl{font-family:Archivo;font-weight:700;font-size:13px;fill:#1c2433;}
+          .bd{font-family:Spectral;font-size:11.5px;fill:#3d4759;}
+          .ex{font-family:'JetBrains Mono';font-size:10px;fill:#a8462f;}
+          .src{font-family:'JetBrains Mono';font-size:9.5px;fill:#9aa1ad;}
+        </style>
+        <!-- three column frames -->
+        <line x1="312" y1="20" x2="312" y2="460" stroke="#d6cdba" stroke-width="1.5"/>
+        <line x1="608" y1="20" x2="608" y2="460" stroke="#d6cdba" stroke-width="1.5"/>
+
+        <!-- ===== FAMILY 1 ===== -->
+        <text x="24" y="40" class="fam">1 · TABLES THAT LIE</text>
+        <text x="24" y="54" class="fam" fill="#9a571c">WHEN FLATTENED</text>
+        <text x="24" y="74" class="bd">2-D structure is the meaning.</text>
+        <text x="24" y="89" class="bd">Read as rows, it becomes garbage.</text>
+
+        <text x="24" y="120" class="ttl">▸ Nested column headers</text>
+        <text x="24" y="137" class="bd">"650" is meaningless without</text>
+        <text x="24" y="152" class="bd">"width @ bulk-density 1.5".</text>
+        <text x="24" y="168" class="src">Continental belt spec table · 3 header levels</text>
+
+        <text x="24" y="196" class="ttl">▸ Merged category cells</text>
+        <text x="24" y="213" class="bd">"Heavy Duty" spans 14 rows —</text>
+        <text x="24" y="228" class="bd">detaches when linearized.</text>
+
+        <text x="24" y="256" class="ttl">▸ Transposed tables</text>
+        <text x="24" y="273" class="bd">Attributes are rows, variants are</text>
+        <text x="24" y="288" class="bd">columns. Row-wise read = wrong.</text>
+        <text x="24" y="304" class="src">Sidewall cleat tables</text>
+
+        <text x="24" y="332" class="ttl">▸ Cross-reference grids</text>
+        <text x="24" y="349" class="bd">Column keys (ST1000…ST5400)</text>
+        <text x="24" y="364" class="bd">live in a separate table above.</text>
+        <text x="24" y="380" class="src">Steel-cord cord-number grid</text>
+
+        <text x="24" y="408" class="ttl">▸ Footnote-coded values</text>
+        <text x="24" y="425" class="bd">"*" and "»" are values whose</text>
+        <text x="24" y="440" class="bd">meaning sits elsewhere.</text>
+
+        <!-- ===== FAMILY 2 ===== -->
+        <text x="328" y="40" class="fam">2 · MEANING OUTSIDE</text>
+        <text x="328" y="54" class="fam">THE TEXT</text>
+        <text x="328" y="74" class="bd">The discriminating attribute is</text>
+        <text x="328" y="89" class="bd">a picture. Vision is mandatory.</text>
+
+        <text x="328" y="120" class="ttl">▸ Specs only in diagrams</text>
+        <text x="328" y="137" class="bd">A gearbox cutaway carries the</text>
+        <text x="328" y="152" class="bd">real spec as image callouts.</text>
+        <text x="328" y="168" class="ex">⊘ NBR seals · taper-roller bearings</text>
+        <text x="328" y="183" class="ex">⊘ gas-carburized, ground gears</text>
+
+        <text x="328" y="216" class="ttl">▸ Column legend is a drawing</text>
+        <text x="328" y="233" class="bd">Columns A,B,C,F-Q… mean nothing</text>
+        <text x="328" y="248" class="bd">without the labeled engineering</text>
+        <text x="328" y="263" class="bd">drawing that defines each letter.</text>
+        <text x="328" y="279" class="src">KIC shaft-mounting dimension sheet</text>
+
+        <text x="328" y="312" class="ttl">▸ Image is the only ID</text>
+        <text x="328" y="329" class="bd">Cleat profiles &amp; belt-layer types</text>
+        <text x="328" y="344" class="bd">differ only by silhouette — zero</text>
+        <text x="328" y="359" class="bd">distinguishing text at all.</text>
+
+        <text x="328" y="392" class="ttl">▸ Source-data errors</text>
+        <text x="328" y="409" class="bd">A header repeats "ST1000 ST1000…"</text>
+        <text x="328" y="424" class="bd">The catalog itself is wrong; naive</text>
+        <text x="328" y="439" class="bd">extraction propagates the error.</text>
+
+        <!-- ===== FAMILY 3 ===== -->
+        <text x="624" y="40" class="fam">3 · CONTEXT STATED</text>
+        <text x="624" y="54" class="fam">ONCE, FAR AWAY</text>
+        <text x="624" y="74" class="bd">Facts govern items pages away.</text>
+        <text x="624" y="89" class="bd">Inheritance — or worse, a guess.</text>
+
+        <text x="624" y="120" class="ttl">▸ Certs on an early page</text>
+        <text x="624" y="137" class="bd">IEC 61111 · ISO 9001 · CE · REACH</text>
+        <text x="624" y="152" class="bd">declared on page 2, apply to</text>
+        <text x="624" y="167" class="bd">products ten pages later.</text>
+        <text x="624" y="183" class="src">Duratuf cert spread</text>
+
+        <text x="624" y="211" class="ttl">▸ Standards at section heads</text>
+        <text x="624" y="228" class="bd">DIN 22131 · AS/NZS 2269 named</text>
+        <text x="624" y="243" class="bd">once; the rows below carry none.</text>
+
+        <text x="624" y="271" class="ttl">▸ Brand at the masthead</text>
+        <text x="624" y="288" class="bd">Manufacturer named on the cover,</text>
+        <text x="624" y="303" class="bd">never repeated per item.</text>
+
+        <text x="624" y="331" class="ttl">▸ Units declared once</text>
+        <text x="624" y="348" class="bd">"All dimensions in mm" — one</text>
+        <text x="624" y="363" class="bd">caption governing 90 cells.</text>
+
+        <text x="624" y="391" class="ttl">▸ The inference trap</text>
+        <text x="624" y="408" class="ex">When a fact isn't restated, an</text>
+        <text x="624" y="423" class="ex">extractor guesses it — fabricating</text>
+        <text x="624" y="438" class="ex">a cert that gates the wrong RFQ.</text>
+      </svg>
+      <figcaption><b>Fig 2.</b> Three families of structural traps, drawn from real catalogs. <b>None is a chunking problem</b> — you cannot chunk your way back out of structure destroyed during extraction. The fix is upstream, in how catalogs are read.</figcaption>
+    </figure>
+
+    <p>Two further traps recur everywhere. <strong>Variants hide in ranges and footnotes</strong> — a gearbox rated <span class="mono">"5:1 to 490:1"</span> needs parsing into <span class="mono">{min, max}</span> and a numeric check, not similarity (more in §3). And <strong>brand wears four different hats</strong> — the same string can be the supplier's own brand, a resold brand, a <em>customer logo</em> (the Tata, Adani, or KOC logos that appear in these very catalogs), or a product grade. Inheriting it naively can attach a customer's logo to a product as if it were for sale.</p>
+
+    <h3>The response: read with vision, carry context forward</h3>
+    <p>Catalogs are ingested through a single <strong>stateful vision-LLM sweep</strong> over page images, and each property answers one family of traps. <strong>Vision</strong> reads 2-D tables as tables — rebuilding nested headers, merged cells, transposed layouts — and reads the diagrams and silhouettes where meaning lives outside the text (families 1–2). <strong>Statefulness</strong> carries brand, certifications, standards, and units forward from cover and section heads, inheriting them onto items pages later (family 3). And a fact is only ever <em>inherited from where it was stated</em>, never <em>guessed</em> — closing the inference trap by refusing to fill a field the catalog didn't support.</p>
+    <p>The output is <strong>one self-contained record per (product line × brand)</strong>, so a leaf never reads as <span class="mono">"CDH8409, 9mm"</span> with no idea what it is, what it's certified to, or who makes it. Where the source itself is wrong — a repeated <span class="mono">"ST1000"</span> header — that's surfaced for review rather than silently propagated.</p>
+
+    <div class="callout">
+      <span class="k">Validated, not assumed</span>
+      ~50–55 representative catalogs were manually analyzed for product coverage, spec fields, and manufacturer–product links. This ingestion work moved the needle on valid-quote rates <strong>more than any downstream ranking tweak</strong>.
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. WHY EMBEDDINGS WEREN'T ENOUGH ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">03</span><h2>Why embeddings weren't enough</h2></div>
+    <p class="lede">Embeddings are excellent at paraphrase and terrible at exactly the tokens this domain depends on. That mismatch quietly costs recall where it hurts most.</p>
+
+    <div class="vs">
+      <div class="exp">
+        <div class="h"><span class="dot"></span>The expectation</div>
+        <p>One semantic space. RFQ and catalog meet by cosine similarity. The model "understands" the match.</p>
+      </div>
+      <div class="rea">
+        <div class="h"><span class="dot"></span>The reality</div>
+        <p><span class="mono">LMV52.200B1</span> and "Siemens combustion manager" aren't close in vector space. Neither are <span class="mono">70 m³/hr</span> and "70 cubic mtrs/hr." Neither is a <span class="mono">250:1</span> ratio against the text "5:1 to 490:1."</p>
+      </div>
+    </div>
+
+    <p>Two failures, distinct in kind. <strong>Vocabulary mismatch</strong>: "Siemens" vs "Siemens India," "PCHENIX" (a real typo) vs "Phoenix Contact," "SS304" vs "Stainless Steel 304." And <strong>structured-attribute matching</strong>: part numbers, unit-bearing specs, numeric ranges — none of which similarity handles reliably. Leaning on the embedding to absorb these silently under-recalls on the highest-value, most specific terms in the request.</p>
+
+    <h3>The response: retrieve broadly, reason narrowly</h3>
+    <p>Nothing hard-filters. <strong>Hybrid retrieval</strong> — dense embeddings for genuine paraphrase, BM25 for the lexical tokens embeddings fumble, and a dedicated part-number lane — does <em>recall</em>. Category and brand are <em>ranking biases, never filters</em>, so an inconsistent taxonomy or a mis-resolved brand costs a candidate a few rank positions instead of silently excluding it. Then an LLM makes the actual decision.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Retrieve broad, bias soft, reason narrow architecture">
+        <defs>
+          <marker id="arr2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 z" fill="#1c2433"/>
+          </marker>
+        </defs>
+        <!-- recall column -->
+        <text x="24" y="32" font-family="Archivo" font-weight="800" font-size="13" fill="#9a571c" letter-spacing="1">RETRIEVE BROAD</text>
+        <g font-family="Archivo" font-weight="600" font-size="13" fill="#1c2433" text-anchor="middle">
+          <rect x="24" y="50" width="190" height="40" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/><text x="119" y="75">Dense embeddings</text>
+          <rect x="24" y="104" width="190" height="40" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/><text x="119" y="129">BM25 / keyword</text>
+          <rect x="24" y="158" width="190" height="40" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/><text x="119" y="183">Part-number lane</text>
+        </g>
+        <text x="119" y="228" font-family="JetBrains Mono" font-size="11.5" fill="#3d4759" text-anchor="middle">fused → high-recall set</text>
+
+        <!-- bias column -->
+        <line x1="232" y1="124" x2="270" y2="124" stroke="#1c2433" stroke-width="1.5" marker-end="url(#arr2)"/>
+        <text x="288" y="32" font-family="Archivo" font-weight="800" font-size="13" fill="#9a571c" letter-spacing="1">BIAS SOFT</text>
+        <g font-family="Spectral" font-size="13" fill="#1c2433">
+          <rect x="288" y="50" width="250" height="148" fill="#efe9dd" stroke="#c2722b" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="304" y="78" font-family="Archivo" font-weight="600" font-size="13">Ranking biases only</text>
+          <text x="304" y="104">· category neighborhood (+)</text>
+          <text x="304" y="126">· canonical brand match (+)</text>
+          <text x="304" y="148">· marketing / external (–)</text>
+          <text x="304" y="178" font-size="12" fill="#a8462f" font-family="JetBrains Mono">never a hard filter</text>
+        </g>
+
+        <!-- reason column -->
+        <line x1="556" y1="124" x2="594" y2="124" stroke="#1c2433" stroke-width="1.5" marker-end="url(#arr2)"/>
+        <text x="612" y="32" font-family="Archivo" font-weight="800" font-size="13" fill="#9a571c" letter-spacing="1">REASON NARROW</text>
+        <g font-family="Spectral" font-size="13" fill="#1c2433">
+          <rect x="612" y="50" width="284" height="148" fill="#1c2433" stroke="#1c2433" stroke-width="1.5"/>
+          <text x="628" y="78" font-family="Archivo" font-weight="700" font-size="14" fill="#fff">LLM judgment layer</text>
+          <text x="628" y="104" fill="#e9e4d8" font-size="12.5">reasons over the candidate's</text>
+          <text x="628" y="122" fill="#e9e4d8" font-size="12.5">specs + parent context</text>
+          <text x="628" y="148" fill="#e8a25c" font-size="12.5">emits: bucket · confidence ·</text>
+          <text x="628" y="166" fill="#e8a25c" font-size="12.5">per-attribute reasoning</text>
+        </g>
+        <text x="612" y="228" font-family="JetBrains Mono" font-size="11.5" fill="#3d4759">↑ the only component that decides a match</text>
+      </svg>
+      <figcaption><b>Fig 3.</b> Because no gate can hard-exclude, <b>retrieval recall becomes the make-or-break metric</b> — the LLM can only judge what retrieval surfaced. Nothing downstream recovers a miss.</figcaption>
+    </figure>
+
+    <div class="insight">One discipline holds this together: <span>normalization is symmetric.</span> "Siemens" matches "Siemens India" only because the <em>same</em> canonicalizer — brand aliases, unit conversion, taxonomy — runs on both the catalog and the RFQ. Normalize one side only, and you reintroduce every mismatch at the point of comparison.</div>
+  </div>
+</section>
+
+<!-- ============ 4. PRECISION VS RECALL ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">04</span><h2>Precision vs recall is a supplier-economics decision</h2></div>
+    <p class="lede">Early instinct favored recall — surface every plausible supplier. In practice that was harmful, and the reason isn't ML. It's trust.</p>
+
+    <div class="vs">
+      <div class="exp">
+        <div class="h"><span class="dot"></span>Recall-first instinct</div>
+        <p>Don't miss anyone who could supply it. More candidates, more quotes, more competition.</p>
+      </div>
+      <div class="rea">
+        <div class="h"><span class="dot"></span>What false positives cost</div>
+        <p>Suppliers get low-quality RFQs and regret engaging. Ghosting rises on the <em>next</em> RFQ. Buyer trust degrades from noisy quotes. Ops cleanup grows.</p>
+      </div>
+    </div>
+
+    <p>Shifting to <strong>precision-first</strong> — actively suppressing low-confidence matches — improved supplier response rates ~21–25% over baseline in early signals and cut ops cleanup. An economic decision, not a metric optimization. It also surfaces a subtlety specific to supplier-level routing: the system matches on <strong>plausibility of supply, not confirmed possession</strong>. A supplier can be a reasonable match and still regret the RFQ for lacking that exact variant — invisible to quote-conversion, lethal to long-term trust.</p>
+
+    <p>The matching layer expresses this through <strong>confidence-floored buckets</strong>. Retrieved candidates are reduced to one best item per supplier, then sorted into tiers — and crucially, <em>buckets are capacity, not quota</em>. Empty slots are a feature. An RFQ with three genuine matches transmits to three suppliers, not ten padded ones.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Confidence-floored match buckets">
+        <style>
+          .bt{font-family:Archivo;font-weight:700;font-size:14px;fill:#1c2433;}
+          .bs{font-family:Spectral;font-size:12.5px;fill:#3d4759;}
+        </style>
+        <!-- floor line -->
+        <text x="24" y="30" class="bt" fill="#9a571c">MATCH BUCKETS · filled only above the confidence floor</text>
+
+        <rect x="24"  y="48" width="206" height="200" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="40" y="74" class="bt">① Product + brand</text>
+        <text x="40" y="96" class="bs">Right brand, right spec.</text>
+        <text x="40" y="114" class="bs">Supplier very likely has it.</text>
+        <rect x="40" y="128" width="174" height="14" fill="#3f7a52" opacity="0.85"/>
+        <rect x="40" y="146" width="174" height="14" fill="#3f7a52" opacity="0.7"/>
+        <rect x="40" y="164" width="120" height="14" fill="#3f7a52" opacity="0.55"/>
+        <text x="40" y="232" class="bs" font-family="JetBrains Mono" font-size="11">→ can auto-transmit</text>
+
+        <rect x="254" y="48" width="206" height="200" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="270" y="74" class="bt">② Brand + partial</text>
+        <text x="270" y="96" class="bs">Right brand, some specs</text>
+        <text x="270" y="114" class="bs">unconfirmed. Likely.</text>
+        <rect x="270" y="128" width="174" height="14" fill="#c2722b" opacity="0.8"/>
+        <rect x="270" y="146" width="120" height="14" fill="#c2722b" opacity="0.6"/>
+        <text x="270" y="232" class="bs" font-family="JetBrains Mono" font-size="11">→ human review</text>
+
+        <rect x="484" y="48" width="206" height="200" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="500" y="74" class="bt">③ Spec, brand-open</text>
+        <text x="500" y="96" class="bs">Strong spec, different</text>
+        <text x="500" y="114" class="bs">brand — if buyer is open.</text>
+        <rect x="500" y="128" width="120" height="14" fill="#c2722b" opacity="0.55"/>
+        <text x="500" y="170" class="bs" font-family="JetBrains Mono" font-size="11" fill="#a8462f">often empty by design</text>
+        <text x="500" y="232" class="bs" font-family="JetBrains Mono" font-size="11">→ higher floor</text>
+
+        <rect x="714" y="48" width="182" height="200" fill="#efe9dd" stroke="#9aa1ad" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="730" y="74" class="bt" fill="#3d4759">④ Web backstop</text>
+        <text x="730" y="96" class="bs">External sources, coarse.</text>
+        <text x="730" y="114" class="bs">Fires only when ①–③</text>
+        <text x="730" y="132" class="bs">come up thin.</text>
+        <text x="730" y="232" class="bs" font-family="JetBrains Mono" font-size="11" fill="#a8462f">→ never auto-transmit</text>
+
+        <text x="24" y="278" class="bs" font-style="italic">For unbranded items, buckets ① and ③ collapse into one — there is no brand axis to distinguish them.</text>
+      </svg>
+      <figcaption><b>Fig 4.</b> The confidence floor — tuned per bucket and per supplier type — is the live precision/spam knob. Bucket ③ carries the highest floor because proposing a substitute is the riskiest, most trust-sensitive match.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ 5. RULES + HUMANS ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">05</span><h2>Where rules helped, and where humans were mandatory</h2></div>
+    <p class="lede">Matching was never a binary AI-vs-human switch. It was a layered decision system where each component does what it's actually good at.</p>
+
+    <h3>Where deterministic rules earned their place</h3>
+    <p>Rules and keyword matching gave a fast, debuggable, high-precision baseline for common SKUs, and stayed valuable as a diagnostic layer after embeddings arrived. In the final design — LLM making every match decision — deterministic checks guard the <em>plumbing around</em> the model: normalization symmetry, unit canonicality, routing-safety invariants (no supplier gets a line they didn't match; nothing below the floor auto-transmits; external never auto-transmits). They can't judge a match, but they catch the silent regressions that would poison the model's inputs.</p>
+
+    <h3>Where humans were non-negotiable</h3>
+    <p>Some decisions stayed human not because the model was immature, but because the cost of error is <strong>irreversible</strong>. Humans bracket the system on <em>both</em> ends — interpreting ambiguous inputs before they enter the pipeline, and reviewing risky matches before they reach a supplier.</p>
+    <ul class="clean">
+      <li><b>Ambiguous RFQ specs, at the input</b> — when a buyer's line item is unclear, underspecified, or uses non-standard shorthand, ops interprets and disambiguates it <em>before</em> it enters the normalizer. A clean, intentional spec in beats a confident misread downstream — and it keeps the structuring step honest rather than guessing.</li>
+      <li><b>Supplier legitimacy</b> — a wrong call here isn't a bad match, it's a bad actor in the funnel.</li>
+      <li><b>First-time &amp; high-risk orders</b> — no track record to lean on, maximum downside.</li>
+      <li><b>Edge-case fabrication</b> — where the right answer needs a conversation, not a classification.</li>
+      <li><b>Every low-confidence and alternate-brand match, at the output</b> — confirmed before a supplier is ever bothered.</li>
+    </ul>
+    <p>This input-side role stays consistent with a deliberately <strong>non-blocking</strong> design: ops disambiguates when a spec is genuinely unclear, but the system never stalls — unclear lines proceed at low confidence and are caught downstream, with most enrichment happening once suppliers engage.</p>
+
+    <p>The routing decision is gated by confidence: high-confidence brand-and-product matches transmit automatically; everything else routes to an ops reviewer. One detail makes supplier-level routing humane — a supplier <strong>only ever receives the specific lines they matched</strong>, with the matched item and per-attribute reasoning attached, never the full RFQ blindly. That's both the audit trail and the reason the supplier doesn't feel spammed.</p>
+
+    <div class="pull">Automation was earned, category by category — not assumed. The core judgment was deciding where <span style="color:var(--signal)">not to automate yet.</span></div>
+  </div>
+</section>
+
+<!-- ============ 6. SYSTEM DESIGN ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">06</span><h2>The system, end to end</h2></div>
+    <p class="lede">Every principle so far is one lane of a single pipeline — a sequence of stages where work shifts deliberately between <em>rules</em>, <em>retrieval</em>, the <em>model</em>, and <em>humans</em>, each placed where it's strong.</p>
+
+    <p>Two ideas govern the wiring. <strong>Catalog and RFQ pass through the same normalization</strong> before they meet — the symmetry that reconciles "Siemens" with "Siemens India." And the flow is <strong>recall-first then precision-gated</strong>: cast wide in retrieval because nothing downstream recovers a miss, then narrow hard through LLM judgment and confidence floors before anything reaches a supplier.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="End to end matching system, from ingestion to routing, with AI rules and human boundaries marked">
+        <defs>
+          <marker id="aD" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1c2433"/></marker>
+          <marker id="aS" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#c2722b"/></marker>
+        </defs>
+        <style>
+          .st{font-family:Archivo;font-weight:700;font-size:13.5px;fill:#1c2433;}
+          .sd{font-family:Spectral;font-size:11.5px;fill:#3d4759;}
+          .st-w{font-family:Archivo;font-weight:700;font-size:13.5px;fill:#ffffff;}
+          .sd-w{font-family:Spectral;font-size:11.5px;fill:#ede7da;}
+          .am-w{font-family:Spectral;font-size:11.5px;fill:#e8a25c;}
+          .sn{font-family:Archivo;font-weight:800;font-size:11px;fill:#9a571c;}
+          .leg{font-family:JetBrains Mono;font-size:11px;}
+        </style>
+
+        <!-- legend -->
+        <rect x="24" y="20" width="13" height="13" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.4"/>
+        <text x="44" y="31" class="leg" fill="#1c2433">rules / deterministic</text>
+        <rect x="214" y="20" width="13" height="13" fill="#efe9dd" stroke="#c2722b" stroke-width="1.4" stroke-dasharray="3 2"/>
+        <text x="234" y="31" class="leg" fill="#9a571c">retrieval</text>
+        <rect x="330" y="20" width="13" height="13" fill="#1c2433"/>
+        <text x="350" y="31" class="leg" fill="#1c2433">LLM</text>
+        <rect x="420" y="20" width="13" height="13" fill="#fff" stroke="#3f7a52" stroke-width="1.4"/>
+        <text x="440" y="31" class="leg" fill="#3f7a52">human</text>
+
+        <!-- TWO INTAKE LANES -->
+        <text x="24" y="62" class="sn">SUPPLIER SIDE</text>
+        <rect x="24" y="70" width="392" height="58" fill="#1c2433" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="38" y="92" class="st-w">① Vision-LLM catalog sweep</text>
+        <text x="38" y="110" class="sd-w">stateful, over page images → one record per (line × brand)</text>
+
+        <text x="500" y="62" class="sn">BUYER SIDE</text>
+        <rect x="500" y="70" width="396" height="58" fill="#1c2433" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="514" y="92" class="st-w">② RFQ structuring  <tspan font-family="JetBrains Mono" font-size="10" fill="#7fb38f">+ ops disambiguation</tspan></text>
+        <text x="514" y="110" class="sd-w">per-line specs · ops interprets unclear specs first · non-blocking</text>
+
+        <!-- shared normalization -->
+        <line x1="220" y1="128" x2="220" y2="150" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <line x1="698" y1="128" x2="698" y2="150" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <rect x="24" y="152" width="872" height="58" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="38" y="174" class="st">③ Shared normalization  —  the same canonicalizer on both sides</text>
+        <text x="38" y="193" class="sd">soft taxonomy (classify-or-extend) · brand alias dictionary (the one hard lookup) · universal unit / format normalization</text>
+
+        <!-- index -->
+        <line x1="460" y1="210" x2="460" y2="232" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <rect x="248" y="234" width="424" height="50" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="262" y="255" class="st">④ Index  ·  one store</text>
+        <text x="262" y="272" class="sd">dense vectors + BM25 + part-number lane · category &amp; brand stored soft</text>
+
+        <!-- retrieval -->
+        <line x1="460" y1="284" x2="460" y2="306" stroke="#c2722b" stroke-width="1.5" marker-end="url(#aS)"/>
+        <rect x="200" y="308" width="520" height="56" fill="#efe9dd" stroke="#c2722b" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="214" y="330" class="st" fill="#9a571c">⑤ Retrieve broad → bias soft</text>
+        <text x="214" y="348" class="sd">hybrid recall · category/brand/source as ranking only · dedup to supplier, carry top-5 items</text>
+
+        <!-- LLM judge -->
+        <line x1="460" y1="364" x2="460" y2="386" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <rect x="200" y="388" width="520" height="62" fill="#1c2433" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="214" y="410" class="st-w">⑥ LLM judgment  →  bucket + confidence floor</text>
+        <text x="214" y="429" class="sd-w">keeps best item per supplier · per-attribute reasoning · ① brand+product  ② brand+partial</text>
+        <text x="214" y="444" class="am-w">③ spec-only (higher floor)  ·  ④ web backstop  ·  slots stay empty below floor</text>
+
+        <!-- routing fork -->
+        <line x1="340" y1="450" x2="300" y2="476" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <line x1="580" y1="450" x2="620" y2="476" stroke="#1c2433" stroke-width="1.5" marker-end="url(#aD)"/>
+        <rect x="86" y="478" width="356" height="54" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="100" y="500" class="st">⑦a High-confidence ①</text>
+        <text x="100" y="518" class="sd">auto-transmit · supplier gets only the lines they matched</text>
+
+        <rect x="478" y="478" width="356" height="54" fill="#fff" stroke="#3f7a52" stroke-width="1.6"/>
+        <text x="492" y="500" class="st" fill="#1f5235">⑦b Everything else → human review</text>
+        <text x="492" y="518" class="sd">legitimacy · first-time · ambiguous · alternate-brand · external</text>
+      </svg>
+      <figcaption><b>Fig 5.</b> The pipeline end to end. Two intake lanes converge at <b>shared normalization</b>, fan into recall-first retrieval, then narrow through LLM judgment and confidence floors. Humans bracket the system on both ends — <b>interpreting ambiguous RFQ specs at the input</b> and reviewing trust-sensitive matches at the output; only high-confidence brand-and-product matches auto-transmit.</figcaption>
+    </figure>
+
+    <div class="insight">Read the colors and the design reads itself: <span>rules guard the rails, retrieval casts wide, the model decides, humans hold the irreversible calls.</span> No single component is trusted to do a job it's bad at — which is the whole point.</div>
+  </div>
+</section>
+
+<!-- ============ 7. EVALS ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">07</span><h2>How I'd design the evals</h2></div>
+    <p class="lede">Evals exist to make a non-deterministic system debuggable — and they're worthless until they're grounded in looking at real failures.</p>
+
+    <h3>What existed</h3>
+    <p>Honest current state: evaluation ran on manual spot checks, ops feedback loops, and business metrics as proxies. Ground truth existed but was <strong>deliberately narrow</strong> — ~50–55 catalogs validated for completeness, ~300 items mapped to known high-confidence suppliers. Diagnostic, not statistically representative; the job was to surface failure modes early and stop the team optimizing against misleading offline metrics. What follows is what I'd design next on that base.</p>
+
+    <h3>How I'd evaluate — the method</h3>
+    <p>A four-tier stack, where the expensive human work <em>feeds</em> the cheap automated checks rather than the reverse.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four-tier evaluation stack and its feedback direction">
+        <defs>
+          <marker id="arrUp" markerWidth="10" markerHeight="10" refX="5" refY="2" orient="auto">
+            <path d="M0,8 L5,0 L10,8" fill="none" stroke="#c2722b" stroke-width="1.6"/>
+          </marker>
+        </defs>
+        <style>
+          .tt{font-family:Archivo;font-weight:700;font-size:15px;}
+          .td{font-family:Spectral;font-size:12.5px;fill:#3d4759;}
+          .tt-w{font-family:Archivo;font-weight:700;font-size:15px;fill:#ffffff;}
+          .td-w{font-family:Spectral;font-size:12.5px;fill:#ede7da;}
+          .tl{font-family:JetBrains Mono;font-size:11px;fill:#9a571c;}
+        </style>
+
+        <!-- tiers as stacked bands -->
+        <rect x="120" y="36"  width="680" height="64" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="140" y="62" class="tt" fill="#1c2433">1 · Deterministic</text>
+        <text x="140" y="84" class="td">Assertions on the plumbing: normalization symmetry, unit canonicality, routing safety. Runs every change.</text>
+
+        <rect x="120" y="112" width="680" height="64" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="140" y="138" class="tt" fill="#1c2433">2 · LLM-as-judge <tspan font-family="JetBrains Mono" font-size="11" fill="#9a571c">(narrow first)</tspan></text>
+        <text x="140" y="160" class="td">Binary judgments — brand-match validity, bucket correctness — validated against human labels before trusted.</text>
+
+        <rect x="120" y="188" width="680" height="64" fill="#fbf8f1" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="140" y="214" class="tt" fill="#1c2433">3 · Golden sets</text>
+        <text x="140" y="236" class="td">Curated from failure modes. Retrieval recall@K leads — if the known-good supplier isn't retrieved, nothing else matters.</text>
+
+        <rect x="120" y="264" width="680" height="64" fill="#1c2433" stroke="#1c2433" stroke-width="1.5"/>
+        <text x="140" y="290" class="tt-w">4 · Human review <tspan font-family="JetBrains Mono" font-size="11" fill="#e8a25c">(the source, not the floor)</tspan></text>
+        <text x="140" y="312" class="td-w">Ops error analysis at the matching interface. One structured verdict feeds tiers 1–3 and every flywheel.</text>
+
+        <!-- feedback arrow on the left -->
+        <line x1="70" y1="296" x2="70" y2="60" stroke="#c2722b" stroke-width="1.6" marker-end="url(#arrUp)"/>
+        <text x="40" y="180" class="tl" transform="rotate(-90 40 180)" text-anchor="middle">humans discover → encode upward</text>
+      </svg>
+      <figcaption><b>Fig 6.</b> The dependency runs <b>bottom-up</b>: humans find failures → golden sets capture them → the judge encodes the validated ones → stable checks harden into assertions. You start at tier 4, not tier 1.</figcaption>
+    </figure>
+
+    <h3>What I'd measure</h3>
+    <p>Method sits above metrics; the metrics fall into three buckets, ordered the way the system behaves — inputs first, because they predict everything downstream.</p>
+
+    <p><strong>1 · Input quality (leading indicators).</strong> Spec completeness (tolerances, ranges, materials, standards), process and certification coverage, catalog freshness and structural integrity. If these degrade, matching degrades regardless of model choice — and they move <em>before</em> outcomes do.</p>
+
+    <p><strong>2 · Confidence-bucket performance.</strong> Quote and technical-approval rates for high-confidence matches; override rate and false-negative recovery for reviewed ones; and the <strong>suppressed-known-good rate</strong> against ground truth, so precision-tightening never silently drops capable suppliers. Above all, because nothing hard-filters, <strong>retrieval recall@K leads</strong> — a match absent from the candidate set is unrecoverable.</p>
+
+    <div class="callout">
+      <span class="k">How precision is actually measured</span>
+      Precision-first only means something if precision is measured — and in a plausibility-of-supply system it has no single definition, so it's triangulated three ways, <em>per bucket</em>. <strong>Offline</strong>: true precision on the ~300-item ground truth (narrow but direct). <strong>Scaled</strong>: the validated LLM-judge plus ops override rate — a high override rate on a bucket <em>is</em> low precision there. <strong>Economic</strong>: supplier response and non-regret — precision as suppliers experience it. And because perfect precision is trivially gamed by routing almost nothing, the real target is <strong>precision at a fixed recall floor</strong> — clean matches <em>subject to</em> not dropping known-good suppliers. Suppressed-known-good and precision are the two ends of that one dial.
+    </div>
+
+    <p><strong>3 · Trust &amp; outcome signals</strong> — read as <strong>two gates, not one</strong>:</p>
+
+    <div class="vs">
+      <div class="exp">
+        <div class="h"><span class="dot" style="background:var(--good)"></span>North star</div>
+        <p><b style="color:var(--ink)">RFQ → valid-quote conversion</b>, segmented by bucket. Did the match produce a quotable supplier?</p>
+      </div>
+      <div class="rea">
+        <div class="h"><span class="dot"></span>Guardrail</div>
+        <p><b style="color:var(--ink)">Supplier response &amp; non-regret rate</b> (up ~21–25% over baseline in early signals). A system can maximize conversion while burning goodwill — and you won't see the damage until ghosting rises months later.</p>
+      </div>
+    </div>
+
+    <p>Optimize conversion; constrain on response. When they conflict — tightening floors lifts response but can drop coverage — response is the constraint you don't violate, because its damage is delayed and irreversible. A good match is defined by <em>execution survival and preserved trust</em>, not offline similarity. The loop is fed by <strong>structured ops feedback at the matching interface</strong>: a fixed-category verdict (brand-mismatch, taxonomy cross-mismatch, plausible-but-no-variant, retrieval-miss…) that does error analysis, grows the golden sets, validates the judge, and tunes the floors. One click, four jobs.</p>
+
+    <h3>Drift is market movement, not model decay</h3>
+    <p>In a marketplace, drift shows up less as model degradation than as the <em>market</em> moving — supplier capability changes, catalog obsolescence, buyer-intent shifts. So it's monitored as <strong>business risk</strong>, through leading indicators: rising override rates, supplier ghosting patterns, and conversion drops isolated to AI-suggested matches. Those signals — not a model-decay metric — tell you when to tighten thresholds or expand human review.</p>
+  </div>
+</section>
+
+<!-- ============ 7. WHAT THIS PROVES ============ -->
+<section class="body">
+  <div class="wrap">
+    <div class="sechead"><span class="secnum">08</span><h2>What this proves</h2></div>
+    <p class="lede">This experience shaped how I approach AI products — less as a search for better models, more as a discipline of knowing where models belong.</p>
+
+    <ul class="clean">
+      <li><b>Models are components, not solutions.</b> The leverage was in data formation, normalization, and risk boundaries — not model choice.</li>
+      <li><b>Matching quality is capped by input clarity.</b> Cleaner catalogs and structured RFQs beat any ranking tweak. Garbage in is unrecoverable downstream.</li>
+      <li><b>Precision-first preserves market trust.</b> In a system where false positives cost relationships, suppressing weak matches is an economic strategy, not a metric.</li>
+      <li><b>Retrieve broad, reason narrow.</b> Embeddings and keywords carry recall; soft biases shape ranking; the LLM decides — and auditability comes from its per-attribute reasoning.</li>
+      <li><b>Automation must be earned.</b> Confidence gates, not assumptions, decide when the system acts. Some decisions stay human permanently.</li>
+      <li><b>Evals track execution survival, not offline accuracy.</b> A good match is defined by quote conversion and preserved trust — grounded in humans looking at real failures.</li>
+    </ul>
+
+    <div class="insight">The hardest decisions in this system were never modeling decisions. They were judgments about <span>where to be broad, where to be strict, and where to refuse to automate</span> — and how to know, from real supplier behavior, whether those judgments were right.</div>
+  </div>
+</section>
+
+<nav class="pf-pager">
+  <a class="prev" href="artifact-2-system-design.html"><span class="k">← Prev · Artifact 02</span><span class="t">End-to-End Procurement System Design</span></a>
+  <a class="index" href="index.html#work">All work ↑</a>
+  <a class="next" href="artifact-4-decision-tradeoffs.html"><span class="k">Next · Artifact 04 →</span><span class="t">Decision Tradeoffs Under Founder-Led Strategy</span></a>
+</nav>
+
+<footer>
+  <div class="wrap">
+    <span class="eyebrow">Artifact 03 · AI Matching</span>
+    <p>A decision-system artifact, not an architecture deep-dive or a model-accuracy story. It documents where AI created leverage, where it required boundaries, and where non-AI work — data formation, normalization, human judgment — mattered more than the model. <b>Built on real procurement data: shredded supplier catalogs, brand-variant noise, multi-line RFQs, and the asymmetric cost of a wrong match.</b></p>
+  </div>
+</footer>
+
+</body>
+</html>

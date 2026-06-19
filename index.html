@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divyanshu Shukla — Product Manager · Applied AI & B2B Platforms</title>
+<meta name="description" content="Product manager for applied-AI and B2B platforms. Ex-data scientist. First PM at NiryatAI, building a 0→1 cross-border procurement platform across buyer, supplier, and ops surfaces.">
+<meta property="og:title" content="Divyanshu Shukla — Product Manager · Applied AI & B2B Platforms">
+<meta property="og:description" content="I take ambiguous, high-stakes problem spaces and ship structured products with measurable outcomes.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/pf-chrome.css">
+<style>
+  :root{
+    --ink:#1c2433;
+    --ink-soft:#3d4759;
+    --paper:#f6f3ec;
+    --paper-2:#efe9dd;
+    --paper-3:#e9e1d1;
+    --line:#d6cdba;
+    --line-2:rgba(28,36,51,.08);
+    --signal:#c2722b;
+    --signal-deep:#9a571c;
+    --signal-wash:#f0e2cf;
+    --ghost:#9aa1ad;
+    --good:#3f7a52;
+    --bad:#a8462f;
+    --max:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Spectral',Georgia,serif;font-size:18px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  ::selection{background:rgba(194,114,43,.22)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  h1,h2,h3,h4,.eyebrow,.label,.kicker{font-family:'Archivo',system-ui,sans-serif}
+  a{color:var(--signal-deep)}
+
+  .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--signal-deep);display:block}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+  /* ---------- HERO ---------- */
+  .hero{border-bottom:2px solid var(--ink);padding:72px 0 50px}
+  .hero .eyebrow{margin-bottom:24px}
+  .hero h1{font-size:clamp(40px,7vw,76px);font-weight:800;line-height:.98;
+    letter-spacing:-.022em;margin:0 0 8px}
+  .hero h1 .amber{color:var(--signal)}
+  .hero .sub{font-size:clamp(19px,2.3vw,23px);color:var(--ink-soft);max-width:660px;
+    margin:26px 0 0;line-height:1.5}
+  .hero .sub b{color:var(--ink);font-weight:600}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+  .btn{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;letter-spacing:.01em;
+    text-decoration:none;padding:13px 22px;border-radius:4px;border:1.5px solid var(--ink);
+    transition:transform .15s,background .2s,color .2s}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:#000;transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--paper-2);transform:translateY(-1px)}
+  .hero .meta{margin-top:36px;display:flex;flex-wrap:wrap;gap:10px 26px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-soft);
+    border-top:1px solid var(--line);padding-top:18px}
+  .hero .meta b{color:var(--ink);font-weight:500}
+
+  /* ---------- section scaffolding ---------- */
+  section.body{padding:62px 0 6px}
+  .sechead{display:flex;align-items:baseline;gap:18px;border-bottom:1.5px solid var(--ink);
+    padding-bottom:12px;margin-bottom:30px}
+  .secnum{font-family:'Archivo',sans-serif;font-weight:800;font-size:15px;
+    color:var(--signal-deep);letter-spacing:.04em;flex:none}
+  .sechead h2{font-size:clamp(24px,3.6vw,34px);font-weight:800;letter-spacing:-.015em;
+    margin:0;line-height:1.06}
+  .lede{font-size:20px;color:var(--ink-soft);margin:0 0 8px;max-width:760px;line-height:1.5}
+
+  /* ---------- pillars ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:8px 0 4px}
+  .pillar{border:1px solid var(--line);border-top:3px solid var(--signal);border-radius:8px;
+    padding:24px 22px;background:#fbf8f1}
+  .pillar .pn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--signal-deep);
+    letter-spacing:.08em}
+  .pillar h3{font-size:19px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em}
+  .pillar p{margin:0;font-size:15.5px;color:var(--ink-soft);line-height:1.55}
+
+  /* ---------- work cards ---------- */
+  .work{display:grid;gap:16px;margin-top:6px}
+  .card{display:grid;grid-template-columns:74px 1fr auto;gap:0 26px;align-items:start;
+    text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;
+    padding:26px 28px;background:#fbf8f1;
+    transition:border-color .2s,transform .2s,box-shadow .2s}
+  .card:hover{border-color:var(--signal);transform:translateY(-2px);
+    box-shadow:0 10px 30px -18px rgba(28,36,51,.4)}
+  .card .num{font-family:'Archivo',sans-serif;font-weight:800;font-size:40px;color:var(--line);
+    line-height:.9}
+  .card:hover .num{color:var(--signal)}
+  .card .kind{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--signal-deep);margin-bottom:8px;display:block}
+  .card h3{font-family:'Archivo',sans-serif;font-size:21px;font-weight:700;margin:0 0 8px;
+    letter-spacing:-.01em;line-height:1.16}
+  .card p{margin:0;font-size:15.5px;color:var(--ink-soft);line-height:1.5;max-width:60ch}
+  .card .res{align-self:center;text-align:right;min-width:150px}
+  .card .res .big{font-family:'Archivo',sans-serif;font-weight:800;font-size:22px;color:var(--ink);
+    line-height:1;letter-spacing:-.01em}
+  .card .res .rl{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+    letter-spacing:.03em;margin-top:8px;line-height:1.4}
+  .card .arrow{font-family:'Archivo',sans-serif;font-weight:700;color:var(--signal-deep);
+    font-size:15px;margin-top:10px;display:inline-block}
+
+  /* ---------- metrics ---------- */
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:6px 0;
+    border:1px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--ink)}
+  .metric{padding:28px 24px;background:var(--ink);color:#e9e4d8;
+    border-right:1px solid rgba(246,243,236,.12);border-bottom:1px solid rgba(246,243,236,.12)}
+  .metric .big{font-family:'Archivo',sans-serif;font-weight:800;font-size:34px;color:#fff;
+    line-height:1;letter-spacing:-.01em}
+  .metric .big .arr{color:var(--signal);font-weight:700}
+  .metric .lbl{font-size:14.5px;color:#cdbfa6;margin-top:10px;line-height:1.4;font-family:'Spectral',serif}
+  .metric .src{font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a8f99;
+    letter-spacing:.06em;margin-top:8px;text-transform:uppercase}
+
+  /* ---------- competencies ---------- */
+  .comp{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .comp .group{border:1px solid var(--line);border-radius:8px;padding:22px;background:#fbf8f1}
+  .comp .group h4{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--signal-deep);margin:0 0 14px}
+  .comp ul{list-style:none;margin:0;padding:0}
+  .comp li{font-size:14.5px;color:var(--ink-soft);padding:7px 0 7px 20px;position:relative;
+    border-bottom:1px solid var(--line-2);line-height:1.45}
+  .comp li:last-child{border-bottom:none}
+  .comp li::before{content:"";position:absolute;left:2px;top:15px;width:8px;height:2px;
+    background:var(--signal)}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 260px;gap:44px;align-items:start}
+  .about p{margin:0 0 16px;color:var(--ink-soft)}
+  .about p b{color:var(--ink);font-weight:600}
+  .about-side{display:flex;flex-direction:column;gap:18px}
+  .portrait{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:50% 38%;
+    border-radius:10px;border:1px solid var(--line);
+    box-shadow:0 14px 36px -20px rgba(28,36,51,.45);display:block}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;margin-top:40px;
+    background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .facts .row{display:block;padding:15px 18px;font-size:14px;background:#fbf8f1}
+  .facts .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--signal-deep);display:block;margin-bottom:7px}
+  .facts .v{color:var(--ink);display:block;line-height:1.42}
+
+  /* ---------- contact ---------- */
+  .contact{background:var(--ink);color:var(--paper);border-radius:14px;padding:48px 40px;
+    margin:6px 0 0;position:relative;overflow:hidden}
+  .contact::after{content:"";position:absolute;right:-70px;top:-70px;width:260px;height:260px;
+    border-radius:50%;background:radial-gradient(circle,rgba(194,114,43,.24),transparent 68%)}
+  .contact .eyebrow{color:var(--signal);margin-bottom:14px}
+  .contact h2{font-family:'Archivo',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:800;
+    color:#fff;margin:0 0 12px;letter-spacing:-.015em;position:relative;z-index:1}
+  .contact p{color:#cdbfa6;max-width:560px;margin:0 0 26px;position:relative;z-index:1}
+  .contact .links{display:flex;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
+  .contact .links a{font-family:'Archivo',sans-serif;font-weight:700;font-size:14px;
+    text-decoration:none;padding:12px 20px;border-radius:4px;border:1.5px solid rgba(246,243,236,.3);
+    color:var(--paper);transition:background .2s,border-color .2s}
+  .contact .links a:hover{background:rgba(246,243,236,.1);border-color:var(--signal)}
+  .contact .links a.solid{background:var(--signal);border-color:var(--signal);color:#fff}
+  .contact .links a.solid:hover{background:var(--signal-deep)}
+
+  footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0 70px}
+  footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;
+    color:var(--ghost);text-transform:uppercase}
+  footer.site a{color:var(--ink-soft);text-decoration:none}
+  footer.site a:hover{color:var(--signal-deep)}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  @media(max-width:820px){
+    .pillars,.comp{grid-template-columns:1fr}
+    .metrics{grid-template-columns:1fr 1fr}
+    .about-grid{grid-template-columns:1fr;gap:24px;justify-items:center}
+    .about{justify-self:stretch}
+    .portrait{max-width:240px}
+  }
+  @media(max-width:680px){
+    .wrap{padding:0 20px}
+    .hero{padding:52px 0 38px}
+    .cta-row .btn{flex:1 1 100%;text-align:center}
+    .sechead{gap:12px}
+    .card{grid-template-columns:1fr;gap:6px;padding:22px}
+    .card .num{font-size:30px}
+    .card .res{text-align:left;margin-top:14px}
+    .metrics{grid-template-columns:1fr}
+    .contact{padding:34px 24px}
+  }
+</style>
+</head>
+<body>
+<a href="#work" class="pf-skip">Skip to work</a>
+
+<!-- shared top nav -->
+<nav class="pf-nav">
+  <a class="pf-home" href="index.html">Divyanshu Shukla<span class="dot">.</span></a>
+  <div class="pf-nav-links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a class="pf-cta" href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+  </div>
+  <span class="pf-nav-num">PM · Applied AI &amp; B2B</span>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Product Manager · Applied AI &amp; B2B Platforms · Ex-Data Scientist</span>
+    <h1>Structured products for <span class="amber">ambiguous,<br>high-stakes</span> problems.</h1>
+    <p class="sub">I'm Divyanshu — a product manager for messy, high-stakes problem spaces where <b>AI, B2B platforms, and real operational risk</b> meet. I turn them into products teams can trust.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="#work">View the work →</a>
+      <a class="btn ghost" href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Download résumé (PDF)</a>
+    </div>
+    <div class="meta">
+      <span><b>Now</b> · First PM @ NiryatAI (ex-WorldRef)</span>
+      <span><b>Before</b> · Data Scientist</span>
+      <span><b>Education</b> · B.Tech, IIT Kanpur</span>
+      <span><b>Based</b> · Noida, India</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ WHAT I DO ============ -->
+<section class="body reveal" id="approach">
+  <div class="sechead"><span class="secnum">01</span><h2>How I work</h2></div>
+  <p class="lede">Three things show up in everything below: build from zero, put AI where it earns its place, and design the decision — not just the feature.</p>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pn">01</span>
+      <h3>0→1 platform building</h3>
+      <p>First PM taking a services business to a platform — buyer, supplier, and ops surfaces from scratch, against three cold-starts at once.</p>
+    </div>
+    <div class="pillar">
+      <span class="pn">02</span>
+      <h3>Applied AI with real evals</h3>
+      <p>7+ live AI systems in production, plus a solo-built AI product graded by a 106-mode failure catalogue — eval-gated, human-in-the-loop where errors are irreversible.</p>
+    </div>
+    <div class="pillar">
+      <span class="pn">03</span>
+      <h3>Decision &amp; system design</h3>
+      <p>Separating reversible decisions from irreversible commitments — and knowing where <em>not</em> to automate yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SELECTED WORK ============ -->
+<section class="body reveal" id="work">
+  <div class="sechead"><span class="secnum">02</span><h2>Selected work</h2></div>
+  <p class="lede">Six case studies, in order. They're written to show the <em>messy middle</em> — the assumptions that broke, the tradeoffs taken with eyes open, and the outcomes (won, lost, and still playing out).</p>
+
+  <div class="work">
+
+    <a class="card" href="artifact-1-why-platforms-break.html">
+      <div class="num">01</div>
+      <div>
+        <span class="kind">Product thinking · Discovery</span>
+        <h3>Why Cross-Border Procurement Platforms Break</h3>
+        <p>What actually breaks when you turn a services-heavy procurement business into a platform — and why the failure is almost never where the marketplace playbook predicts. Solve coordination before you scale discovery.</p>
+        <span class="arrow">Read case study →</span>
+      </div>
+      <div class="res"><div class="big">RFQ→PO</div><div class="rl">the one north-star that<br>can't be faked</div></div>
+    </a>
+
+    <a class="card" href="artifact-2-system-design.html">
+      <div class="num">02</div>
+      <div>
+        <span class="kind">Platform &amp; systems design</span>
+        <h3>End-to-End Procurement System Design</h3>
+        <p>A 9-layer decision-system across the order lifecycle, organized around one line: the last reversible state before commitment. Above it, automation leans forward; below it, every call is Ops-gated.</p>
+        <span class="arrow">Read case study →</span>
+      </div>
+      <div class="res"><div class="big">9 layers</div><div class="rl">reversible vs. binding,<br>by design</div></div>
+    </a>
+
+    <a class="card" href="artifact-3-ai-matching.html">
+      <div class="num">03</div>
+      <div>
+        <span class="kind">Applied AI · ML product judgment</span>
+        <h3>AI Matching: Reality vs Expectation</h3>
+        <p>Designing supplier matching where a wrong match doesn't just hurt UX — it burns a supplier relationship. Cast wide in retrieval, narrow hard through reasoning and confidence floors, refuse to automate the irreversible.</p>
+        <span class="arrow">Read case study →</span>
+      </div>
+      <div class="res"><div class="big">+21–25%</div><div class="rl">supplier response,<br>precision-first</div></div>
+    </a>
+
+    <a class="card" href="artifact-4-decision-tradeoffs.html">
+      <div class="num">04</div>
+      <div>
+        <span class="kind">Leadership · judgment under constraint</span>
+        <h3>Decision Tradeoffs Under Founder-Led Strategy</h3>
+        <p>Four real disagreements when I didn't hold the final call — marked honestly as won, lost, or mixed. How I created leverage by shaping options, sequencing risk, and owning outcomes regardless.</p>
+        <span class="arrow">Read case study →</span>
+      </div>
+      <div class="res"><div class="big">won / lost</div><div class="rl">not a success story —<br>judgment, marked honestly</div></div>
+    </a>
+
+    <a class="card" href="artifact-5-granola-teardown.html">
+      <div class="num">05</div>
+      <div>
+        <span class="kind">Product teardown · Granola</span>
+        <h3>The Discipline of Subtraction</h3>
+        <p>What Granola removed — the bot and the stored audio — and why it mattered more than anything it added. Every load-bearing design decision builds the moat and the ceiling at the same time.</p>
+        <span class="arrow">Read teardown →</span>
+      </div>
+      <div class="res"><div class="big">−2</div><div class="rl">subtractions that<br>made the product</div></div>
+    </a>
+
+    <a class="card" href="artifact-6-lecturesnap.html">
+      <div class="num">06</div>
+      <div>
+        <span class="kind">0→1 AI build + evaluation</span>
+        <h3>LectureSnap — Building AI I Could Actually Trust</h3>
+        <p>A solo-built AI study tool (Chrome extension + web app + pipeline), then an honest audit of where it isn't there yet: 106 failure modes, a designed eval framework, and the gap between the two.</p>
+        <span class="arrow">Read case study →</span>
+      </div>
+      <div class="res"><div class="big">0 / 47</div><div class="rl">invented formulas —<br>fails by omission, not lies</div></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ============ BY THE NUMBERS ============ -->
+<section class="body reveal" id="impact">
+  <div class="sechead"><span class="secnum">03</span><h2>By the numbers</h2></div>
+  <p class="lede">Outcomes from the NiryatAI 0→1 build — the leading quote-quality indicators and the lagging conversion north-star, kept deliberately separate.</p>
+  <div class="metrics">
+    <div class="metric"><div class="big">15% <span class="arr">→</span> 35%</div><div class="lbl">Supplier response rate, after shifting matching to precision-first</div><div class="src">AI supplier matching</div></div>
+    <div class="metric"><div class="big">~180 <span class="arr">→</span> ~1,400</div><div class="lbl">Active supplier base, built via capability-ingestion pipelines</div><div class="src">Engineered liquidity</div></div>
+    <div class="metric"><div class="big">5d <span class="arr">→</span> 2d</div><div class="lbl">Time-to-first-confident-quote for buyers</div><div class="src">Quote-quality leading indicator</div></div>
+    <div class="metric"><div class="big">−22%</div><div class="lbl">Post-PO escalation rate, via earlier completeness &amp; validation gates</div><div class="src">Execution stability</div></div>
+    <div class="metric"><div class="big">7+</div><div class="lbl">Live AI systems shipped across the procurement lifecycle</div><div class="src">RFQ extraction · QC · classification</div></div>
+    <div class="metric"><div class="big">18 mo</div><div class="lbl">Roadmap scoped &amp; sequenced — 6 initiatives, 2 AI-led — managing one APM</div><div class="src">Ownership &amp; sequencing</div></div>
+  </div>
+</section>
+
+<!-- ============ COMPETENCIES ============ -->
+<section class="body reveal" id="skills">
+  <div class="sechead"><span class="secnum">04</span><h2>What I bring</h2></div>
+  <div class="comp">
+    <div class="group">
+      <h4>Product &amp; execution</h4>
+      <ul>
+        <li>Product discovery &amp; PRDs</li>
+        <li>System &amp; state-machine design</li>
+        <li>Roadmapping &amp; sequencing</li>
+        <li>Metrics &amp; north-star framing</li>
+        <li>Autonomy-gradient design</li>
+        <li>Cross-functional delivery · APM management</li>
+      </ul>
+    </div>
+    <div class="group">
+      <h4>Applied AI &amp; data</h4>
+      <ul>
+        <li>Applied LLM systems &amp; agents</li>
+        <li>Embeddings &amp; semantic matching · RAG</li>
+        <li>Prompt &amp; context design</li>
+        <li>Eval design &amp; ground-truth curation</li>
+        <li>Human-in-the-loop governance</li>
+        <li>Failure-mode analysis · SQL &amp; data modeling</li>
+      </ul>
+    </div>
+    <div class="group">
+      <h4>Domain &amp; tools</h4>
+      <ul>
+        <li>Cross-border B2B procurement</li>
+        <li>Marketplace liquidity &amp; trust</li>
+        <li>Jira · Figma · Notion · Confluence</li>
+        <li>Amplitude · Mixpanel · Postman</li>
+        <li>Python · SQL · AWS · Power BI</li>
+        <li>Claude Code</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="body reveal" id="about">
+  <div class="sechead"><span class="secnum">05</span><h2>About</h2></div>
+  <div class="about-grid">
+    <div class="about">
+      <p>I'm a product manager working at the intersection of <b>applied AI and B2B platforms</b>. As the <b>first PM at NiryatAI</b> (formerly WorldRef), I've owned the 0→1 build of a full-stack cross-border procurement platform — turning a bespoke, trader-led business into a standardized workflow spanning RFQ through order execution.</p>
+      <p>Before product, I was a <b>data scientist</b>, which shapes how I treat models: as components, not solutions. The leverage is almost always in the data formation, the evaluation, and the risk boundaries — not the model itself.</p>
+    </div>
+    <img class="portrait" src="assets/divyanshu-portrait.jpg" alt="Divyanshu Shukla" width="1000" height="1000" decoding="async">
+  </div>
+  <div class="facts">
+    <div class="row"><span class="k">Role</span><span class="v">First Product Manager, NiryatAI (ex-WorldRef) · Dec 2023–present</span></div>
+    <div class="row"><span class="k">Before</span><span class="v">Data Scientist, Merilytics · ML + rule-based freight routing</span></div>
+    <div class="row"><span class="k">Education</span><span class="v">B.Tech, Mechanical Engineering — IIT Kanpur</span></div>
+    <div class="row"><span class="k">Focus</span><span class="v">Applied-AI · B2B platforms · marketplace trust &amp; ops leverage</span></div>
+    <div class="row"><span class="k">Built</span><span class="v">LectureSnap — solo AI study tool (extension + web + pipeline)</span></div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="body reveal" id="contact">
+  <div class="contact">
+    <span class="eyebrow">Get in touch</span>
+    <h2>Open to PM roles in applied AI &amp; B2B platforms.</h2>
+    <p>Building something ambitious in an AI-heavy or B2B space? I'd love to talk.</p>
+    <div class="links">
+      <a class="solid" href="mailto:divyanshushuklagamma@gmail.com">Email me</a>
+      <a href="https://www.linkedin.com/in/ds-v/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/DS-v" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="assets/Divyanshu_Shukla_PM_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF) ↗</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="row">
+      <span>Divyanshu Shukla · Product Manager</span>
+      <span><a href="mailto:divyanshushuklagamma@gmail.com">divyanshushuklagamma@gmail.com</a></span>
+      <span>© 2026 · Built &amp; designed by hand</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if(rm || !('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+    },{threshold:0.10,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>
+</body>
+</html>
