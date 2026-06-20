@@ -75,6 +75,14 @@
     margin:0;line-height:1.06}
   .lede{font-size:20px;color:var(--ink-soft);margin:0 0 8px;max-width:760px;line-height:1.5}
 
+  /* ---------- pillars ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:8px 0 4px}
+  .pillar{border:1px solid var(--line);border-top:3px solid var(--signal);border-radius:8px;
+    padding:24px 22px;background:#fbf8f1}
+  .pillar .pn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--signal-deep);
+    letter-spacing:.08em}
+  .pillar h3{font-size:19px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em}
+  .pillar p{margin:0;font-size:15.5px;color:var(--ink-soft);line-height:1.55}
 
   /* ---------- work cards ---------- */
   .work{display:grid;gap:16px;margin-top:6px}
@@ -112,6 +120,17 @@
   .metric .src{font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a8f99;
     letter-spacing:.06em;margin-top:8px;text-transform:uppercase}
 
+  /* ---------- competencies ---------- */
+  .comp{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .comp .group{border:1px solid var(--line);border-radius:8px;padding:22px;background:#fbf8f1}
+  .comp .group h4{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--signal-deep);margin:0 0 14px}
+  .comp ul{list-style:none;margin:0;padding:0}
+  .comp li{font-size:14.5px;color:var(--ink-soft);padding:7px 0 7px 20px;position:relative;
+    border-bottom:1px solid var(--line-2);line-height:1.45}
+  .comp li:last-child{border-bottom:none}
+  .comp li::before{content:"";position:absolute;left:2px;top:15px;width:8px;height:2px;
+    background:var(--signal)}
 
   /* ---------- about ---------- */
   .about-grid{display:grid;grid-template-columns:1fr 260px;gap:44px;align-items:start}
@@ -157,6 +176,7 @@
   @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
   @media(max-width:820px){
+    .pillars,.comp{grid-template-columns:1fr}
     .metrics{grid-template-columns:1fr 1fr}
     .about-grid{grid-template-columns:1fr;gap:24px;justify-items:center}
     .about{justify-self:stretch}
@@ -211,9 +231,32 @@
 
 <main class="wrap">
 
+<!-- ============ WHAT I DO ============ -->
+<section class="body reveal" id="approach">
+  <div class="sechead"><span class="secnum">01</span><h2>How I work</h2></div>
+  <p class="lede">Three things show up in everything below: build from zero, put AI where it earns its place, and design the decision — not just the feature.</p>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pn">01</span>
+      <h3>0→1 platform building</h3>
+      <p>First PM taking a services business to a platform — buyer, supplier, and ops surfaces from scratch, against three cold-starts at once.</p>
+    </div>
+    <div class="pillar">
+      <span class="pn">02</span>
+      <h3>Applied AI with real evals</h3>
+      <p>7+ live AI systems in production, plus a solo-built AI product graded by a 106-mode failure catalogue — eval-gated, human-in-the-loop where errors are irreversible.</p>
+    </div>
+    <div class="pillar">
+      <span class="pn">03</span>
+      <h3>Decision &amp; system design</h3>
+      <p>Separating reversible decisions from irreversible commitments — and knowing where <em>not</em> to automate yet.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ SELECTED WORK ============ -->
 <section class="body reveal" id="work">
-  <div class="sechead"><span class="secnum">01</span><h2>Selected work</h2></div>
+  <div class="sechead"><span class="secnum">02</span><h2>Selected work</h2></div>
   <p class="lede">Six case studies, in order. They're written to show the <em>messy middle</em> — the assumptions that broke, the tradeoffs taken with eyes open, and the outcomes (won, lost, and still playing out).</p>
 
   <div class="work">
@@ -289,7 +332,7 @@
 
 <!-- ============ BY THE NUMBERS ============ -->
 <section class="body reveal" id="impact">
-  <div class="sechead"><span class="secnum">02</span><h2>By the numbers</h2></div>
+  <div class="sechead"><span class="secnum">03</span><h2>By the numbers</h2></div>
   <p class="lede">Outcomes from the NiryatAI 0→1 build — the leading quote-quality indicators and the lagging conversion north-star, kept deliberately separate.</p>
   <div class="metrics">
     <div class="metric"><div class="big">15% <span class="arr">→</span> 35%</div><div class="lbl">Supplier response rate, after shifting matching to precision-first</div><div class="src">AI supplier matching</div></div>
@@ -301,12 +344,53 @@
   </div>
 </section>
 
+<!-- ============ COMPETENCIES ============ -->
+<section class="body reveal" id="skills">
+  <div class="sechead"><span class="secnum">04</span><h2>What I bring</h2></div>
+  <div class="comp">
+    <div class="group">
+      <h4>Product &amp; execution</h4>
+      <ul>
+        <li>Product discovery &amp; PRDs</li>
+        <li>System &amp; state-machine design</li>
+        <li>Roadmapping &amp; sequencing</li>
+        <li>Metrics &amp; north-star framing</li>
+        <li>Autonomy-gradient design</li>
+        <li>Cross-functional delivery · APM management</li>
+      </ul>
+    </div>
+    <div class="group">
+      <h4>Applied AI &amp; data</h4>
+      <ul>
+        <li>Applied LLM systems &amp; agents</li>
+        <li>Embeddings &amp; semantic matching · RAG</li>
+        <li>Prompt &amp; context design</li>
+        <li>Eval design &amp; ground-truth curation</li>
+        <li>Human-in-the-loop governance</li>
+        <li>Failure-mode analysis · SQL &amp; data modeling</li>
+      </ul>
+    </div>
+    <div class="group">
+      <h4>Domain &amp; tools</h4>
+      <ul>
+        <li>Cross-border B2B procurement</li>
+        <li>Marketplace liquidity &amp; trust</li>
+        <li>Jira · Figma · Notion · Confluence</li>
+        <li>Amplitude · Mixpanel · Postman</li>
+        <li>Python · SQL · AWS · Power BI</li>
+        <li>Claude Code</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- ============ ABOUT ============ -->
 <section class="body reveal" id="about">
-  <div class="sechead"><span class="secnum">03</span><h2>About</h2></div>
+  <div class="sechead"><span class="secnum">05</span><h2>About</h2></div>
   <div class="about-grid">
     <div class="about">
-      <p>Before product, I was a <b>data scientist</b> — which shapes how I treat AI: models are components, not solutions. The leverage is almost always in data formation, evaluation design, and knowing where human judgment is irreplaceable.</p>
+      <p>I'm a product manager working at the intersection of <b>applied AI and B2B platforms</b>. As the <b>first PM at NiryatAI</b> (formerly WorldRef), I've owned the 0→1 build of a full-stack cross-border procurement platform — turning a bespoke, trader-led business into a standardized workflow spanning RFQ through order execution.</p>
+      <p>Before product, I was a <b>data scientist</b>, which shapes how I treat models: as components, not solutions. The leverage is almost always in the data formation, the evaluation, and the risk boundaries — not the model itself.</p>
     </div>
     <img class="portrait" src="assets/divyanshu-portrait.jpg" alt="Divyanshu Shukla" width="1000" height="1000" decoding="async">
   </div>
