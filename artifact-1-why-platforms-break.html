@@ -213,7 +213,7 @@
 <div class="wrap">
 
   <header class="hero reveal">
-    <p class="eyebrow">WorldRef — cross-border industrial procurement</p>
+    <p class="eyebrow">NiryatAI (formerly Worldref) — cross-border industrial procurement</p>
     <h1>Why Cross-Border Procurement Platforms Break</h1>
     <p class="lede">What actually breaks when you turn a services-heavy cross-border procurement business into a platform — and why the failure is almost never where the marketplace playbook says it will be. <b>This artifact shows how I think about real problems under real constraints.</b></p>
     <div class="metastrip">
@@ -227,10 +227,10 @@
   <section class="reveal">
     <div class="col">
       <div class="sechead"><span class="secnum">01</span><h2>Context — moving from trading to a platform</h2></div>
-      <p>WorldRef started closer to a trading / services model than a pure software platform. Orders were won through relationships, manual sourcing, and constant back-and-forth over email and WhatsApp, with heavy operational work around pricing, documentation, logistics, and expedition.</p>
+      <p>NiryatAI (formerly Worldref) started closer to a trading / services model than a pure software platform. Orders were won through relationships, manual sourcing, and constant back-and-forth over email and WhatsApp, with heavy operational work around pricing, documentation, logistics, and expedition.</p>
       <p><span class="lead-term">Buyer context:</span> mid and small industrial plants — maintenance teams, plant heads, and procurement managers buying MRO, OPEX, and fabricated items. Their priority was keeping plants running with minimum surprises.</p>
       <p><span class="lead-term">Seller context:</span> Indian OEMs, OPMs, distributors, stockists, traders, and fabricators operating in a highly fragmented ecosystem. Most were SME-scale, ops-heavy, and relationship-driven.</p>
-      <p>The initial vision was a sourcing marketplace where buyers self-serve RFQs, suppliers quote through the platform, and AI improves matching. Over time, I came to view it less as a marketplace and more as an <b>intelligence and orchestration layer</b> for cross-border procurement.</p>
+      <p>The initial vision was a sourcing marketplace where buyers self-serve RFQs, suppliers quote through the platform, and AI improves matching, automated negotiation, and instant fulfillment prices. Over time, I came to view it less as a marketplace and more as an <b>intelligence and orchestration layer</b> for cross-border procurement, spanning the complete procurement lifecycle.</p>
       <p>This meant solving three interconnected cold-start problems simultaneously.</p>
     </div>
 
@@ -330,7 +330,7 @@
           <div class="row">The binding constraint was <b>quote credibility</b>, not reach</div>
           <div class="row">Friction was <b>information latency</b>, not the interface</div>
           <div class="row">Buyers optimized for <b>operational safety</b> and predictability</div>
-          <div class="row">Coordination stayed on WhatsApp &amp; email; forcing it on-platform <b>added friction</b></div>
+          <div class="row">On-platform communication mandate <b>increased adoption friction</b> and <b>shrank addressable PMF</b></div>
         </div>
       </div>
       <p class="muted" style="font-size:13px;text-align:center;margin-top:10px">Every assumption survived contact with a demo. None survived contact with real orders.</p>
@@ -360,7 +360,7 @@
         <li>Post-PO blame often sat outside their control.</li>
       </ul>
       <p>A new platform was attractive only if it reduced effort and risk per successful order.</p>
-      <p><span class="lead-term">Channel behavior:</span> coordination continued on WhatsApp, email, and calls. Buyers and suppliers were already embedded in these workflows, and most high-context discussions naturally happened there. The challenge was not replacing these channels, but capturing and structuring the information flowing through them. Forcing communication onto the platform increased friction without improving coordination.</p>
+      <p><span class="lead-term">Channel behavior:</span> coordination continued on WhatsApp, email, and calls. Buyers and suppliers were already embedded in these workflows, and most high-context discussions naturally happened there. Mandating on-platform communication increased adoption friction and effectively narrowed the PMF — procurement teams managing complex orders across entrenched channels were not willing to restructure their workflows for the platform. The real opportunity was capturing and structuring information flowing through those channels, not relocating the conversations.</p>
       <p><span class="lead-term">System pattern:</span> many issues that appeared to be trust problems were actually <b>coordination problems</b>. Information surfaced late, ownership was fragmented across multiple parties, and critical decisions were often made with incomplete context. While the symptoms appeared post-PO as delays, escalations, or disputes, the root causes almost always originated upstream in planning, communication, and decision-making.</p>
     </div>
 
@@ -436,7 +436,7 @@
       <p>What broke repeatedly were structural forces most platforms underestimate.</p>
       <ul class="bl">
         <li><b>Effort and risk are asymmetric.</b> RFQs are cheap to issue but expensive to execute. If effort does not increase PO likelihood and post-PO smoothness, suppliers disengage.</li>
-        <li><b>Liquidity without qualification amplifies noise.</b> More suppliers worsened outcomes when RFQs were unclear.</li>
+        <li><b>Liquidity without qualification amplifies noise.</b> More suppliers worsened outcomes when quotes were unclear.</li>
         <li><b>Standardization breaks against real variance.</b> Certifications, packaging, MOQs, Incoterms, and payment terms made naive templates brittle.</li>
         <li><b>Information latency looks like trust failure.</b> Ambiguity persisted too long.</li>
         <li><b>The real bottleneck spans pre-PO into post-PO.</b> Incomplete RFQs led to fragile quotes, delays, and blame loops.</li>
@@ -452,11 +452,10 @@
     <div class="col">
       <div class="sechead"><span class="secnum">05</span><h2>Design principles that emerged</h2></div>
       <p>These realities forced non-ideal but necessary trade-offs.</p>
-      <p><span class="lead-term">Completeness-first.</span> The bottleneck was quote credibility, not discovery. Even imperfect completeness — freight estimates, compliance fields, explicit assumptions — reduced rework and improved conversion.</p>
+      <p><span class="lead-term">Completeness-first.</span> The bottleneck was quote credibility and trustworthy execution, not discovery. Even imperfect completeness — freight estimates, compliance fields, explicit assumptions — reduced rework and improved pre-order conversion. The same principle applied post-order: clear documentation, proactive status updates, and early flagging of exceptions built the execution trust that made buyers return.</p>
       <p><span class="lead-term">Ops enablement as a product.</span> Human ops were unavoidable early to clean RFQs, buffer risk, and generate structured data for automation.</p>
       <p><span class="lead-term">What we did not optimize early.</span> We deprioritized heavy AI matching, superficial buyer UX polish, and aggressive supplier onboarding.</p>
       <p><span class="lead-term">Treat orchestration as a product capability.</span> As the platform expanded beyond discovery, I viewed operations as a coordination system rather than a support layer. The challenge was not moving information, but ensuring decisions happened with the right context, timing, and ownership. This shifted my thinking from workflow automation to <b>decision orchestration</b>.</p>
-      <p>One decision that went wrong was <b>forcing on-platform communication</b> — a founder-level call I pushed back on. It increased friction and broke context. Communication should have been captured and indexed, not relocated.</p>
     </div>
   </section>
 
@@ -502,12 +501,12 @@
             <td class="col-act">Tighten RFQ structuring, reduce supplier exposure, improve supplier matching, add ops clarification upstream.</td>
           </tr>
           <tr>
-            <td><span class="m-name">Time to First Confident Quote</span><span class="m-form">RFQ submit → first complete quote</span><span class="m-def">Hours/days to a quote with stated timelines, assumptions, and compliance.</span></td>
+            <td><span class="m-name">Time to First Confident Quote</span><span class="m-form">RFQ submit → first complete quote</span><span class="m-def">Hours/days to a quote with stated timelines, assumptions, and compliance — reflects whether RFQs are clear enough for suppliers to commit quickly, and whether suppliers are prioritizing platform RFQs.</span></td>
             <td class="col-dec">Are we signalling reliability to buyers early enough?</td>
             <td class="col-act">Rebalance ops capacity, simplify quote templates, reduce supplier batch size.</td>
           </tr>
           <tr>
-            <td><span class="m-name">Qualified Quotes per RFQ</span><span class="m-form">comparable quotes ÷ RFQ</span><span class="m-def">Quotes where assumptions are stated and comparable — not just raw count.</span></td>
+            <td><span class="m-name">Qualified Quotes per RFQ</span><span class="m-form">technically approved (comparable) quotes ÷ RFQ</span><span class="m-def">Technically approved, comparable quotes — not just raw count.</span></td>
             <td class="col-dec">Is matching creating competition or noise?</td>
             <td class="col-act">Suppress low-confidence matches, prioritise precision over recall.</td>
           </tr>
@@ -576,8 +575,7 @@
 <footer>
   <div class="wrap">
     <div class="col ferow">
-      <span class="tag">Artifact 01 / 06 — WorldRef</span>
-      <p class="note">Drawn from a real platform transition: <b>fragmented SME suppliers, ops-heavy cross-border exports, and the asymmetric cost of an order that breaks after the PO.</b> The lesson that held across all of it — solve coordination before you scale discovery.</p>
+      <span class="tag">Artifact 01 / 06 — NiryatAI</span>
     </div>
   </div>
 </footer>

@@ -443,9 +443,9 @@
 
   <!-- LEDE -->
   <div class="lede reveal">
-    <p>On a customer call last month, a procurement executive at an industrial buyer disclosed something about how his industry actually makes vendor decisions — an honest, slightly uncomfortable truth he would not have said in the first thirty seconds if a bot had announced it was recording. I noticed it because I noticed I hadn't noticed the recording.</p>
+    <p>On a customer call last month, a procurement executive mentioned how his industry actually makes vendor decisions — something he wouldn't have said if a bot had announced it was recording. I noticed because I'd forgotten Granola was running.</p>
 
-    <p>Over the following weeks, my own behavior shifted. I started using Granola for offline 1:1s and ad-hoc discussions, not just calls — it became a queryable record of decisions and reasoning that saved me from re-explaining context. More interesting: my team was visibly more honest about deadlines, risks, and tradeoffs in meetings they perceived as unrecorded, even though Granola was generating notes the entire time. Surveillance perception drives behavior more than surveillance fact.</p>
+    <p>Over the following weeks I started using Granola for offline 1:1s and ad-hoc discussions, not just calls — it became a searchable record of decisions that saved me from re-explaining context. More interesting: my team was more candid about risks and tradeoffs in meetings they thought were unrecorded, even though Granola was running the entire time. Surveillance perception drives behavior more than surveillance fact.</p>
 
     <p class="thesis">Granola's defining decision isn't what it added. It's what it <em>removed</em>.</p>
   </div>
@@ -454,7 +454,7 @@
   <section class="reveal">
     <span class="sec-num">01 — THE FRAME EVERYONE ELSE USES</span>
     <h2>The popular reading</h2>
-    <p>The dominant reading of Granola runs through Karpathy's autonomy slider — Granola sits at a deliberate middle point, the user types what matters, the AI extends rather than replaces. That reading describes what the product <em>feels</em> like. It doesn't explain what made the architecture possible, why competitors imitating the feel can't replicate the economics, or what locks Granola out of the verticals it can't enter. The partial-autonomy UI is a design choice layered on top of a more interesting structural decision. This teardown is about the structural decision.</p>
+    <p>The most common take on Granola references Karpathy's autonomy slider — Granola sits at a deliberate middle point, the user types what matters, the AI extends rather than replaces. That describes what the product <em>feels</em> like. It doesn't explain what made the architecture possible, why competitors can't replicate it, or what keeps Granola out of the markets it can't enter. The partial-autonomy UI is a design choice built on top of a more interesting structural decision. This teardown is about the structural decision.</p>
   </section>
 
   <!-- TWO SUBTRACTIONS -->
@@ -549,7 +549,7 @@
       </div>
     </div>
 
-    <p class="tight"><span class="lead-term">Trust preservation.</span> No bot means no announcement, no disclosure dynamic. The conversation stays in its natural state. This opens a TAM bot-based tools struggle to enter — investor pitches, hiring conversations, sensitive customer research, sales calls where candor sets pricing, internal meetings where teams calibrate against perceived surveillance. The cold-start cohort of VCs and founders wasn't a marketing accident. It was the direct consequence of being usable in the meetings other tools made worse.</p>
+    <p class="tight"><span class="lead-term">Trust preservation.</span> No bot means no announcement, no disclosure moment. The conversation stays natural. This opens a market bot-based tools can't reach — investor pitches, hiring conversations, sensitive customer research, sales calls where candor matters, internal meetings where people behave differently when they think they're being recorded. Early traction with VCs and founders wasn't a marketing accident — it was a direct result of being usable in the meetings other tools couldn't enter.</p>
 
     <p class="tight"><span class="lead-term">Platform and context agnosticism.</span> Bot-based architecture can't capture an in-person 1:1, a phone call, a hallway conversation, or a voice note dictated while driving. Granola can — audio is captured at the OS level regardless of source. Picture being three minutes late for a Zoom call. You don't check Zoom version support, don't paste a link, don't wait for a bot to load. You hit record and join. Bot-based competitors have caught up on platform breadth. What they can't match is the cognitive certainty that the product works regardless of what's producing the audio.</p>
 
@@ -579,15 +579,15 @@
     <div class="breaks">
       <div class="brk">
         <h3>Compliance-mandated industries</h3>
-        <p>SEBI requires Indian stockbrokers to record dealer conversations on turrets and mobile phones for regulatory inspection. RBI imposes parallel rules on banks for customer dispute trails. MiFID II in Europe and FINRA in the US do the same. These regimes don't ask for a record of what was discussed — they require the original communication preserved in non-rewritable form. A transcript is a derivative artifact; audio is the source. Granola has the transcript but not the source. The subtraction that won prosumer trust is the same subtraction that locks Granola out of the highest-ACV verticals.</p>
+        <p>SEBI requires Indian stockbrokers to record dealer conversations for regulatory inspection. RBI has parallel rules for banks. MiFID II and FINRA do the same in Europe and the US. These regulations don't just want a summary of what was discussed — they require the original communication, preserved and unaltered. A transcript is a derived record; audio is the original. Granola has the transcript but not the audio. The same subtraction that earns trust in sensitive meetings locks Granola out of the most valuable regulated markets.</p>
       </div>
       <div class="brk">
         <h3>Unrecoverable transcription error</h3>
-        <p>Without audio playback, a transcription mistake has no source of truth to return to. Speaker identification is also structurally weaker — bot-based tools join the call as a participant and can map audio to identity directly; Granola captures system audio and has to guess. Granola supports ten languages while Fireflies supports sixty-plus — a structural consequence, not a coincidence. Accent-heavy contexts, multilingual organizations, and jargon-dense industries sit outside the addressable market because the architecture can't audit its own errors.</p>
+        <p>Without audio playback, a transcription error has nothing to check against. Speaker identification is also weaker — bot-based tools join the call as a participant and can map audio to speakers directly; Granola captures system audio and has to infer. Granola supports ten languages while Fireflies supports sixty-plus — a structural consequence, not a coincidence. Accent-heavy contexts, multilingual teams, and jargon-heavy industries are hard to serve when the architecture can't check its own errors.</p>
       </div>
       <div class="brk">
         <h3>Governed enterprise expansion</h3>
-        <p>The "your data on your machine" wedge becomes "data is locked in" friction. Disclosure features are off by default. Integrations are deliberately limited. The locked-cache incident — partner workflows breaking when Granola tightened local data access — was the first public symptom. IT-administered governance is fundamentally incompatible with user-administered subtraction. The 2026 API launch is the partial walk-back.</p>
+        <p>The "your data on your machine" advantage becomes a "we can't centrally manage it" problem for IT teams. Disclosure features are off by default. Integrations are deliberately limited. The locked-cache incident — partner workflows breaking when Granola tightened local data access — was the first public sign of this tension. IT governance and user-level privacy defaults pull in opposite directions. The 2026 API launch is a partial concession to enterprise needs.</p>
       </div>
       <div class="brk">
         <h3>Awareness erosion</h3>

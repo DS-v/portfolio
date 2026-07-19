@@ -235,7 +235,7 @@
 <div class="summary">
   <div class="wrap">
     <span class="eyebrow">Executive summary</span>
-    <p>How AI supplier matching was designed, constrained, and evaluated inside an ops-heavy B2B procurement system — building on the failure modes in <a href="artifact-1-why-platforms-break.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 1</a> and the sourcing system in <a href="artifact-2-system-design.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 2</a>. Here a wrong match isn't a UX problem: it raises supplier effort, causes regret and ghosting, and lowers willingness to quote on the <em>next</em> RFQ.</p>
+    <p>How AI supplier matching was designed, constrained, and evaluated inside an ops-heavy B2B procurement system — building on the failure modes in <a href="artifact-1-why-platforms-break.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 1</a> and the procurement system in <a href="artifact-2-system-design.html" style="color:#fff;font-weight:600;text-decoration:underline">Artifact 2</a>. Here a wrong match isn't a UX problem: it raises supplier effort, causes regret and ghosting, and lowers willingness to quote on the <em>next</em> RFQ.</p>
     <p>Three coupled problems run through it — <b style="color:#fff">data formation</b>, <b style="color:#fff">matching</b>, and <b style="color:#fff">decision quality</b>. The design move was the same across all three: cast wide in retrieval, narrow hard through reasoning and confidence floors, and refuse to automate the irreversible calls.</p>
     <div class="thesis">Core takeaway: most matching failures came not from weak models, but from <em>under-designed data, evaluation, and risk boundaries.</em></div>
   </div>
@@ -509,7 +509,7 @@
       </div>
       <div class="rea">
         <div class="h"><span class="dot"></span>What false positives cost</div>
-        <p>Suppliers get low-quality RFQs and regret engaging. Ghosting rises on the <em>next</em> RFQ. Buyer trust degrades from noisy quotes. Ops cleanup grows.</p>
+        <p>Suppliers get low-quality RFQs and regret engaging. More suppliers quoting on the same RFQ reduces each supplier's chance of winning the PO, further depressing engagement. Ghosting rises on the <em>next</em> RFQ. Buyer trust degrades from noisy quotes. Ops cleanup grows.</p>
       </div>
     </div>
 
@@ -579,7 +579,7 @@
     <ul class="clean">
       <li><b>Ambiguous RFQ specs, at the input</b> — when a buyer's line item is unclear, underspecified, or uses non-standard shorthand, ops interprets and disambiguates it <em>before</em> it enters the normalizer. A clean, intentional spec in beats a confident misread downstream — and it keeps the structuring step honest rather than guessing.</li>
       <li><b>Supplier legitimacy</b> — a wrong call here isn't a bad match, it's a bad actor in the funnel.</li>
-      <li><b>First-time &amp; high-risk orders</b> — no track record to lean on, maximum downside.</li>
+      <li><b>First-time &amp; high-risk RFQs</b> — no track record to lean on, maximum downside.</li>
       <li><b>Edge-case fabrication</b> — where the right answer needs a conversation, not a classification.</li>
       <li><b>Every low-confidence and alternate-brand match, at the output</b> — confirmed before a supplier is ever bothered.</li>
     </ul>
@@ -670,8 +670,8 @@
         <text x="100" y="518" class="sd">auto-transmit · supplier gets only the lines they matched</text>
 
         <rect x="478" y="478" width="356" height="54" fill="#fff" stroke="#3f7a52" stroke-width="1.6"/>
-        <text x="492" y="500" class="st" fill="#1f5235">⑦b Everything else → human review</text>
-        <text x="492" y="518" class="sd">legitimacy · first-time · ambiguous · alternate-brand · external</text>
+        <text x="492" y="500" class="st" fill="#3f7a52">⑦b Everything else → human review</text>
+        <text x="492" y="518" class="sd" fill="#3f7a52">legitimacy · first-time · ambiguous · alternate-brand · external</text>
       </svg>
       <figcaption><b>Fig 5.</b> The pipeline end to end. Two intake lanes converge at <b>shared normalization</b>, fan into recall-first retrieval, then narrow through LLM judgment and confidence floors. Humans bracket the system on both ends — <b>interpreting ambiguous RFQ specs at the input</b> and reviewing trust-sensitive matches at the output; only high-confidence brand-and-product matches auto-transmit.</figcaption>
     </figure>

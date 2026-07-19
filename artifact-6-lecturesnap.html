@@ -522,7 +522,7 @@ tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
   <span class="s-label">05 — The Eval</span>
   <h2>What I designed versus what I shipped</h2>
 
-  <p><strong>What I designed.</strong> A four-tier evaluation framework: Tier 1 deterministic code checks on every job, Tier 2 LLM-as-judge for quality dimensions, Tier 3 reference-diff against golden fixtures, Tier 4 human verification. Specified per pipeline layer in the PRD.</p>
+  <p><strong>What I designed.</strong> A four-tier evaluation framework: Tier 1 deterministic code checks on every job, Tier 2 LLM-as-judge for quality dimensions, Tier 3 reference-diff against golden fixtures, Tier 4 human verification. Specified per pipeline layer in the <a href="https://docs.google.com/document/d/199SSKMNoP1SD939HiCmQc4g9Ydy4pUbLL2X-xIWxy5I/edit?usp=sharing" target="_blank" rel="noopener">PRD</a>.</p>
   <p><strong>What I actually shipped.</strong> A minimal, honest slice — not the whole thing, explicitly <strong>not CI-gated</strong>. Layer 1 deterministic checks live in-database as SQL views over per-job diagnostics. And a Layer 5 LLM-as-judge batch: 8-dimension rubric, run by an out-of-family judge (Claude, not Gemini, to avoid self-preference bias), structured JSON output with inline evidence fields for spot-checking. Run once, across six lectures. Two of six spot-checked against source material.</p>
 
   <div class="honest">
@@ -574,7 +574,7 @@ tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
 
   <div class="honest" style="margin-top:24px">
     <div class="honest-label">Caveats</div>
-    <p>N = 6; pre-production batch evaluation, not statistically powered observability. Single judge with its own biases. Three of six references are screenshots — weaker ground truth than handwritten notes. Pedagogical accuracy is low-confidence by design — verifying whether a pitfall is real needs subject expertise the judge doesn't reliably have.</p>
+    <p>N = 6; pre-production batch evaluation, not statistically powered observability. Single judge with its own biases. Three of six references are screenshots — weaker ground truth than handwritten notes. Pedagogical accuracy is low-confidence by design — verifying whether a pitfall is real needs subject expertise the judge doesn't reliably have. Due to limited time, these evals were designed to provide directional signal rather than achieve abstract metric targets.</p>
   </div>
 </section>
 <hr class="rule">
@@ -582,7 +582,7 @@ tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
 <!-- SECTION 6: NEXT -->
 <section class="section reveal" id="next">
   <span class="s-label">06 — What's Next</span>
-  <h2>Four moves, in an order that matters</h2>
+  <h2>Five moves, in an order that matters</h2>
 
   <div class="next-item">
     <span class="next-num">01</span>
@@ -608,11 +608,19 @@ tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
     </div>
   </div>
 
-  <div class="next-item" style="border-bottom:none">
+  <div class="next-item">
     <span class="next-num">04</span>
     <div class="next-content">
       <div class="next-head">Raise concept recall on dense lectures</div>
       <div class="next-body">IC-engines (44%) points at Pass A window boundaries missing the back half of long lectures — but this only recovers the <em>fixable</em> slice of omission; a diagram never captured or a formula only spoken aloud stays out of reach.</div>
+    </div>
+  </div>
+
+  <div class="next-item" style="border-bottom:none">
+    <span class="next-num">05</span>
+    <div class="next-content">
+      <div class="next-head">Validate and tune the LLM-as-judge with a domain expert</div>
+      <div class="next-body">The judge's rubric reflects my own understanding of what "good" looks like — which is the wrong ground truth for pedagogical accuracy. A subject-matter expert reviewing a sample of graded outputs would surface where the rubric is underspecified, where the judge is systematically lenient or harsh, and whether dimensions like "pitfalls real" are being assessed correctly. Judge validation should precede rubric scaling.</div>
     </div>
   </div>
 
