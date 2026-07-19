@@ -81,3 +81,32 @@
   .pf-pager{grid-template-columns:1fr;padding:26px 20px 8px}
   .pf-pager .next,.pf-pager .prev{text-align:left}
 }
+
+/* ---- Artifact hero / masthead (shared across all six artifacts) ---- */
+.pf-hero{border-bottom:1px solid var(--pf-line)}
+.pf-hero-in{max-width:980px;margin:0 auto;padding:60px 28px 46px}
+.pf-hero .pf-eyebrow{
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--pf-signal-deep);
+  margin:0 0 22px}
+.pf-hero .pf-title{
+  font-family:'Archivo',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(33px,5.2vw,55px);line-height:1.05;letter-spacing:-.015em;
+  color:var(--pf-ink);margin:0 0 20px}
+.pf-hero .pf-title em{font-style:italic;color:var(--pf-signal-deep)}
+.pf-hero .pf-standfirst{
+  font-family:'Spectral',Georgia,serif;font-size:clamp(18px,2.1vw,21px);
+  line-height:1.52;color:var(--pf-ink-soft);max-width:64ch;margin:0}
+.pf-hero .pf-standfirst b{color:var(--pf-ink);font-weight:600}
+.pf-hero .pf-meta{
+  display:flex;flex-wrap:wrap;gap:10px 26px;margin:28px 0 0;padding:0;
+  list-style:none;font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:11.5px;letter-spacing:.04em;color:var(--pf-ink-soft)}
+.pf-hero .pf-meta b{color:var(--pf-signal-deep);font-weight:600}
+.pf-hero .pf-tags{display:flex;flex-wrap:wrap;gap:9px;margin:26px 0 0}
+.pf-hero .pf-tags span{
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--pf-signal-deep);
+  border:1px solid var(--pf-line);border-radius:3px;padding:5px 11px;
+  background:var(--pf-paper-2)}
+@media(max-width:680px){.pf-hero-in{padding:40px 20px 30px}}

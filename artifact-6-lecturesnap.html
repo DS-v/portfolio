@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LectureSnap — Artifact 6 — Divyanshu</title>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/pf-chrome.css">
+<link rel="stylesheet" href="assets/pf-chrome.css?v=2">
 <style>
 :root {
   --paper:#f6f3ec; --paper-d:#ede9df; --ink:#1c2433; --ink-m:#3d4759; --ink-l:#6b7585;
@@ -247,26 +247,28 @@ tbody td:nth-child(2){font-family:'JetBrains Mono',monospace;font-size:12px}
   <span class="pf-nav-num">Artifact 06 / 06</span>
 </nav>
 
-<div class="page">
-
 <!-- HERO -->
-<section class="hero">
-  <div class="eyebrow">Artifact 6 — AI Product Build + Evaluation</div>
-  <h1>Building an AI study-notes tool I could actually trust — <em>and auditing where it isn't there yet</em></h1>
-  <p class="hero-sub">LectureSnap converts lecture videos into exam-ready study notes for STEM students. This artifact is less about the product and more about what's underneath it: 106 failure modes, a designed evaluation framework, and the honest gap between the two.</p>
-  <div class="meta-strip">
-    <span class="pill a">Sole PM + Builder</span>
-    <span class="pill">Chrome Extension · Web App · Async Pipeline</span>
-    <span class="pill">Gemini 2.5 Flash / Pro · KaTeX PDF</span>
-    <span class="pill t">6 Lectures Evaluated</span>
+<header class="pf-hero">
+  <div class="pf-hero-in">
+    <p class="pf-eyebrow">Artifact 06 · AI Build &amp; Evaluation</p>
+    <h1 class="pf-title">Building an AI study-notes tool I could actually trust — <em>and auditing where it isn't there yet</em></h1>
+    <p class="pf-standfirst">LectureSnap converts lecture videos into exam-ready study notes for STEM students. This artifact is less about the product and more about what's underneath it: 106 failure modes, a designed evaluation framework, and the honest gap between the two.</p>
+    <div class="pf-tags">
+      <span>Sole PM + Builder</span>
+      <span>Chrome Extension · Web App · Async Pipeline</span>
+      <span>Gemini 2.5 Flash / Pro · KaTeX PDF</span>
+      <span>6 Lectures Evaluated</span>
+    </div>
+    <div class="sup-links">
+      <a href="https://docs.google.com/document/d/199SSKMNoP1SD939HiCmQc4g9Ydy4pUbLL2X-xIWxy5I/edit?usp=sharing">PRD →</a>
+      <a href="https://docs.google.com/spreadsheets/d/1tm2ap-qYZs3k69dtI2rOB4UV5h4D1Cfw/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">106-Mode Failure Catalogue →</a>
+      <a href="https://github.com/DS-v/Lecture-Notes-AI" target="_blank" rel="noopener">Pipeline + GitHub →</a>
+      <a href="https://docs.google.com/spreadsheets/d/1ADhxhnebaCwp0bZnV5UpZOt90Aqm1wXd/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">Eval Results (xlsx) →</a>
+    </div>
   </div>
-  <div class="sup-links">
-    <a href="https://docs.google.com/document/d/199SSKMNoP1SD939HiCmQc4g9Ydy4pUbLL2X-xIWxy5I/edit?usp=sharing">PRD →</a>
-    <a href="https://docs.google.com/spreadsheets/d/1tm2ap-qYZs3k69dtI2rOB4UV5h4D1Cfw/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">106-Mode Failure Catalogue →</a>
-    <a href="https://github.com/DS-v/Lecture-Notes-AI" target="_blank" rel="noopener">Pipeline + GitHub →</a>
-    <a href="https://docs.google.com/spreadsheets/d/1ADhxhnebaCwp0bZnV5UpZOt90Aqm1wXd/edit?usp=sharing&ouid=115484345180180481143&rtpof=true&sd=true">Eval Results (xlsx) →</a>
-  </div>
-</section>
+</header>
+
+<div class="page">
 
 <!-- SECTION 1: PROBLEM -->
 <section class="section reveal" id="problem">
