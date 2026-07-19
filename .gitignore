@@ -5,3 +5,4 @@ convert-to-docx.js
 assets/*.docx
 docx-tmp/
 docx-tmp*/
+.claude/
